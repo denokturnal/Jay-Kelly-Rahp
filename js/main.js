@@ -228,25 +228,70 @@ document.addEventListener('DOMContentLoaded', function() {
     // ... [Rest of the existing DOMContentLoaded logic remains] ...
     
     // Mobile Navigation Toggle
+    // Add this code to main.js, right after the DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', function() {
+    // Existing initialization code...
+
+    // Mobile Menu Toggle
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    const navLinksItems = document.querySelectorAll('.nav-link');
-    
-    hamburger.addEventListener('click', function() {
-        this.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        document.body.classList.toggle('no-scroll');
-    });
-    
+    const nav = document.querySelector('nav');
+
+    // Toggle mobile menu
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event from bubbling up to document
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+            
+            // Toggle overflow on body when menu is open
+            if (navLinks.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
     // Close mobile menu when clicking on a nav link
-    navLinksItems.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            document.body.classList.remove('no-scroll');
+    const navItems = document.querySelectorAll('.nav-links a');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (navLinks && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                if (hamburger) {
+                    hamburger.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
         });
     });
-    
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (navLinks && navLinks.classList.contains('active') && 
+            !nav.contains(e.target) && 
+            !hamburger.contains(e.target)) {
+            navLinks.classList.remove('active');
+            if (hamburger) {
+                hamburger.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    });
+
+    // Close menu on window resize (in case user rotates device)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 992 && navLinks && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            if (hamburger) {
+                hamburger.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    });
+});
     // Smooth scrolling for anchor links on the same page
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         // Only process if the link is on the same page (starts with # and is not a file link)
