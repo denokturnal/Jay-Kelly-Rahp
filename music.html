@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music - Jay Kelly Rahp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player">
+        <audio id="audio-player"></audio>
+        <div class="player-container">
+            <div class="now-playing">
+                <img id="now-playing-art" src="" alt="Now Playing" class="now-playing-art">
+                <div class="track-info">
+                    <h4 id="now-playing-title">Not Playing</h4>
+                    <p id="now-playing-artist">Jay Kelly Rahp</p>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button id="prev-btn" class="control-btn" title="Previous">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button id="play-pause-btn" class="control-btn play-pause" title="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="next-btn" class="control-btn" title="Next">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div class="progress-container">
+                <span id="current-time">0:00</span>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                    <input type="range" id="progress" class="progress-slider" min="0" max="100" value="0">
+                </div>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="volume-container">
+                <i class="fas fa-volume-up volume-icon"></i>
+                <input type="range" id="volume" class="volume-slider" min="0" max="100" value="70">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo-container">
+                <div class="logo-circle">
+                    <img src="img/JKR logo.jpg" alt="JKR Logo" class="logo-img">
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="music.html" class="nav-link active">Music</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Music Section -->
+    <section id="music" class="section">
+        <div class="container">
+            <br>
+            <br>
+            <h2 class="section-title">Music</h2>
+            <div class="music-grid">
+                <!-- Album 1 - ME AND MY TWIN -->
+                <div class="album" data-track="ME AND MY TWIN">
+                    <div class="album-art">
+                        <img src="img/Me and My Twin.png" alt="ME AND MY TWIN">
+                        <div class="album-overlay">
+                            <a href="https://audiomack.com/jay-kelly-rahp/album/me-and-my-twin" target="_blank" class="play-btn" title="Listen on Audiomack">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="audiomack-embed" data-id="album/jay-kelly-rahp/the-earpeace-album-1" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                    </div>
+                    <h3>ME AND MY TWIN</h3>
+                    <p>2025 • Album</p>
+                </div>
+
+                <!-- Album 2 - IWD4U-->
+                <div class="album" data-track="IWD4U">
+                    <div class="album-art">
+                        <img src="img/IWD4U.jpg" alt="IWD4U">
+                        <div class="album-overlay">
+                            <a href="https://audiomack.com/jay-kelly-rahp/album/iwd4u" target="_blank" class="play-btn" title="Listen on Audiomack">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="audiomack-embed" data-id="album/jay-kelly-rahp/iwd4u" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                    </div>
+                    <h3>IWD4U</h3>
+                    <p>2025 • EP</p>
+                </div>
+
+            <!-- Album 3 - Oasis -->
+            <div class="album" data-track="Oasis EP">
+                <div class="album-art">
+                    <img src="img/Oasis Ep.jpg" alt="Oasis EP">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/oasis-1" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/oasis-album-1" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>Oasis</h3>
+                <p>2024 • EP</p>
+            </div>
+
+            <!-- Album 4 - Psalms 116 : 8-9 -->
+            <div class="album" data-track="Psalms 116 : 8-9">
+                <div class="album-art">
+                    <img src="img/Psalms 116.jpg" alt="Psalms 116 : 8-9">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/psalms-116-8-9" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/the-earpeace-album-1" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>Psalms 116 : 8-9</h3>
+                <p>2024 • Album</p>
+            </div>
+
+            <!-- Album 5 - Big 30 -->
+            <div class="album" data-track="Big 30">
+                <div class="album-art">
+                    <img src="img/Big 30.jpg" alt="Big 30">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/big-30" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/Big 30" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>Big 30</h3>
+                <p>2023 • Album</p>
+            </div>
+
+            <!-- Album 6 - Mood EP -->
+            <div class="album" data-track="Mood EP">
+                <div class="album-art">
+                    <img src="img/Mood.jpg" alt="Mood EP">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/mood" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/the-earpeace-album-1" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>Mood</h3>
+                <p>2023 • EP</p>
+            </div>
+
+            <!-- Album 7 - Love & Breakfast -->
+            <div class="album" data-track="Love & Breakfast">
+                <div class="album-art">
+                    <img src="img/Love & Breakfast.jpg" alt="Love & Breakfast">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/love-breakfast-1" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/Love & Breakfast" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>Love & Breakfast</h3>
+                <p>2023 • EP</p>
+            </div>
+
+            <!-- Album 8 - Grandeza -->
+            <div class="album" data-track="Grandeza">
+                <div class="album-art">
+                    <img src="img/Grandeza Album.jpg" alt="Grandeza">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/grandeza" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/grandeza" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>Grandeza</h3>
+                <p>2022 • Album</p>
+            </div>
+
+            <!-- Album 9 - This Is Not The Album -->
+            <div class="album" data-track="This Is Not The Album">
+                <div class="album-art">
+                    <img src="img/This-is-not-the-album.jpg" alt="This Is Not The Album">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/this-is-not-the-album-3" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/this-is-not-the-album" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>This Is Not The Album</h3>
+                <p>2021 • Album</p>
+            </div>
+
+            <!-- Album 10 - THE EARPEACE ALBUM -->
+            <div class="album" data-track="THE EARPEACE ALBUM">
+                <div class="album-art">
+                    <img src="img/the earpeace album.jpg" alt="THE EARPEACE ALBUM">
+                    <div class="album-overlay">
+                        <a href="https://audiomack.com/jay-kelly-rahp/album/the-earpeace-album-1" target="_blank" class="play-btn" title="Listen on Audiomack">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                    <div class="audiomack-embed" data-id="album/jay-kelly-rahp/the-earpeace-album" data-type="album" data-format="classic" data-theme="1" data-auto="1" data-vertical="1" data-width="100%"></div>
+                </div>
+                <h3>THE EARPEACE ALBUM</h3>
+                <p>2019 • Album</p>
+            </div>
+        </div>
+    </div>
+</section>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">JKR</div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="music.html">Music</a>
+                    <a href="videos.html">Videos</a>
+                    <a href="events.html">Events</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-legal">
+                    <p>&copy; <span id="current-year" class="current-year">2025</span> Jay Kelly Rahp. All rights reserved.</p>
+                    <div class="legal-links">
+                        <a href="privacy-policy.html">Privacy Policy</a>
+                        <span>•</span>
+                        <a href="terms.html">Terms of Service</a>
+                        <span>•</span>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="newsletter-signup">
+                        <p>Subscribe to our newsletter for updates and exclusive content</p>
+                        <form class="footer-newsletter">
+                            <input type="email" placeholder="Your email address" autocomplete="email" required>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

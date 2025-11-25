@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Kelly Rahp | Official Website</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player">
+        <audio id="audio-player"></audio>
+        <div class="player-container">
+            <div class="now-playing">
+                <img id="now-playing-art" src="" alt="Now Playing" class="now-playing-art">
+                <div class="track-info">
+                    <h4 id="now-playing-title">Not Playing</h4>
+                    <p id="now-playing-artist">Jay Kelly Rahp</p>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button id="prev-btn" class="control-btn" title="Previous">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button id="play-pause-btn" class="control-btn play-pause" title="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="next-btn" class="control-btn" title="Next">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div class="progress-container">
+                <span id="current-time">0:00</span>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                    <input type="range" id="progress" class="progress-slider" min="0" max="100" value="0">
+                </div>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="volume-container">
+                <i class="fas fa-volume-up volume-icon"></i>
+                <input type="range" id="volume" class="volume-slider" min="0" max="100" value="70">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo-container">
+                <div class="logo-circle">
+                    <img src="img/JKR logo.jpg" alt="JKR Logo" class="logo-img">
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="music.html" class="nav-link">Music</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="glitch" data-text="JAY KELLY RAHP">JAY KELLY RAHP</h1>
+                <p class="tagline">(Rapper Kpanaku)</p>
+                <div class="cta-buttons">
+                    <a href="music.html" class="btn btn-primary">Listen Now</a>
+                    <a href="events.html" class="btn btn-secondary">Tour Dates</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-placeholder"></div>
+                <div class="latest-track">
+                <img src="img/Upcoming Event.png" alt="Heavy Is The Head">
+                <br>
+                    <h3>Latest Release</h3>
+                    <div class="track">
+                        <div class="track-info">
+                            <h4>Heavy Is The Head</h4>
+                            <p>Single • 2025</p>
+                        </div>
+                        <button class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Jay Kelly Rahp</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="profile-image-container">
+                        <img src="img/a-dramatic.jpeg.jpg" alt="Jay Kelly Rahp - Artist Profile" class="profile-image">
+                    </div>
+                </div>
+                <div class="about-text">
+                    <p>Jay Kelly Rahp, also known as Rapper Kpanaku, is a Ghanaian hip-hop artist and songwriter known for his unique blend of traditional Ghanaian sounds with contemporary hip-hop. Hailing from Accra, his music reflects the vibrant culture and rich musical heritage of Ghana while addressing social issues and personal experiences.</p>
+                    
+                    <p>With a career spanning over a decade, Jay Kelly Rahp has established himself as a prominent figure in the African hip-hop scene. His lyrical prowess and dynamic performances have earned him a dedicated fanbase across the continent and beyond.</p>
+                    
+                    <p>His latest single "Heavy Is The Head" showcases his evolution as an artist, blending thought-provoking lyrics with infectious beats that resonate with audiences worldwide.</p>
+                    
+                    <div class="achievements">
+                        <h3>Notable Achievements</h3>
+                        <ul>
+                            <li>Multiple award nominations in the Ghana Music Awards</li>
+                            <li>Featured on major African music platforms and radio stations</li>
+                            <li>Performed at major music festivals across Africa</li>
+                            <li>Collaborations with top African artists</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="social-links">
+                    <a href="https://www.instagram.com/jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #E1306C"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/kellyrahp" target="_blank" class="social-icon" style="--hover-color: #1DA1F2"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.youtube.com/@jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #FF0000"><i class="fab fa-youtube"></i></a>
+                    <a href="https://open.spotify.com/artist/47vQZxH7rVmJEUVmRYr5w8?si=DL0UPCbCSt6NJ_RTIdfLwQ" target="_blank" class="social-icon" style="--hover-color: #1DB954"><i class="fab fa-spotify"></i></a>
+                    <a href="https://wa.me/233271326182" target="_blank" class="social-icon" style="--hover-color: #25D366"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.tiktok.com/@jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #000000"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://music.apple.com/gh/artist/jay-kelly-rahp/1149914183" target="_blank" class="social-icon" style="--hover-color: #FC3C44"><i class="fab fa-apple"></i></a>
+                    <a href="https://audiomack.com/jay-kelly-rahp" target="_blank" class="social-icon" style="--hover-color: #FFA200"><img src="img/audiomack-icon.png" alt="Audiomack" style="width: 24px; height: 24px; object-fit: contain;"></a>
+                    <a href="https://www.deezer.com/en/artist/10934640" target="_blank" class="social-icon" style="--hover-color: #00C7F2"><i class="fab fa-deezer"></i></a>
+                    <a href="https://www.facebook.com/jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #1877F2"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">JKR</div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#music">Music</a>
+                    <a href="#videos">Videos</a>
+                    <a href="#events">Events</a>
+                    <a href="#shop">Shop</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-legal">
+                    <p>&copy; <span id="current-year" class="current-year">2025</span> Jay Kelly Rahp. All rights reserved.</p>
+                    <div class="legal-links">
+                        <a href="privacy-policy.html">Privacy Policy</a>
+                        <span>•</span>
+                        <a href="terms.html">Terms of Service</a>
+                        <span>•</span>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="newsletter-signup">
+                        <p>Subscribe to our newsletter for updates and exclusive content</p>
+                        <form class="footer-newsletter" id="newsletterForm" action="https://formspree.io/f/xrbonnyo" method="POST">
+                            <input type="hidden" name="_subject" value="New Newsletter Subscription">
+                            <input type="email" name="email" placeholder="Your email address" autocomplete="email" required>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="button-text">Subscribe</span>
+                                <span class="spinner" style="display: none;">Sending...</span>
+                            </button>
+                            <p class="newsletter-status" style="display: none; margin-top: 10px; color: #4CAF50; font-size: 0.9rem;"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Audiomack Embed Script -->
+    <script src="https://audiomack.com/embed.js"></script>
+    
+    <script>
+        // Function to handle audio playback
+        function playAudio(audioId) {
+            // Pause all other audio elements
+            document.querySelectorAll('audio').forEach(audio => {
+                if (audio.id !== audioId) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            });
+            
+            // Toggle play/pause for the clicked audio
+            const audio = document.getElementById(audioId);
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+
+        // Handle video thumbnails click
+        document.querySelectorAll('.video-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const videoId = this.getAttribute('data-video-id');
+                const videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                const iframe = document.createElement('iframe');
+                iframe.setAttribute('width', '100%');
+                iframe.setAttribute('height', '315');
+                iframe.setAttribute('src', videoUrl);
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                iframe.setAttribute('allowfullscreen', '');
+                
+                // Replace thumbnail with iframe
+                const thumbnail = this.querySelector('.video-thumbnail');
+                thumbnail.parentNode.replaceChild(iframe, thumbnail);
+            });
+        });
+    </script>
+    <script src="js/main.js"></script>
+    <script>
+        // Handle newsletter form submission
+        const newsletterForm = document.getElementById('newsletterForm');
+        if (newsletterForm) {
+            const newsletterStatus = newsletterForm.querySelector('.newsletter-status');
+            const submitButton = newsletterForm.querySelector('button[type="submit"]');
+            const buttonText = submitButton.querySelector('.button-text');
+            const spinner = submitButton.querySelector('.spinner');
+            
+            newsletterForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                buttonText.style.display = 'none';
+                spinner.style.display = 'inline';
+                submitButton.disabled = true;
+                
+                try {
+                    const response = await fetch(newsletterForm.action, {
+                        method: 'POST',
+                        body: new FormData(newsletterForm),
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        newsletterStatus.textContent = 'Thank you for subscribing!';
+                        newsletterStatus.style.display = 'block';
+                        newsletterForm.reset();
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            newsletterStatus.style.display = 'none';
+                        }, 5000);
+                    } else {
+                        throw new Error('Subscription failed');
+                    }
+                } catch (error) {
+                    newsletterStatus.textContent = 'Failed to subscribe. Please try again.';
+                    newsletterStatus.style.color = '#f44336';
+                    newsletterStatus.style.display = 'block';
+                } finally {
+                    // Reset button state
+                    buttonText.style.display = 'inline';
+                    spinner.style.display = 'none';
+                    submitButton.disabled = false;
+                }
+            });
+        }
+    </script>
+    <style>
+        .spinner {
+            display: none;
+            margin-left: 0.5rem;
+        }
+        .newsletter-status {
+            transition: all 0.3s ease;
+        }
+    </style>
+</body>
+</html>

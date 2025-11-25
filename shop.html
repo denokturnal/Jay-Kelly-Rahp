@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Jay Kelly Rahp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player">
+        <audio id="audio-player"></audio>
+        <div class="player-container">
+            <div class="now-playing">
+                <img id="now-playing-art" src="" alt="Now Playing" class="now-playing-art">
+                <div class="track-info">
+                    <h4 id="now-playing-title">Not Playing</h4>
+                    <p id="now-playing-artist">Jay Kelly Rahp</p>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button id="prev-btn" class="control-btn" title="Previous">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button id="play-pause-btn" class="control-btn play-pause" title="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="next-btn" class="control-btn" title="Next">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div class="progress-container">
+                <span id="current-time">0:00</span>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                    <input type="range" id="progress" class="progress-slider" min="0" max="100" value="0">
+                </div>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="volume-container">
+                <i class="fas fa-volume-up volume-icon"></i>
+                <input type="range" id="volume" class="volume-slider" min="0" max="100" value="70">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo-container">
+                <div class="logo-circle">
+                    <img src="img/JKR logo.jpg" alt="JKR Logo" class="logo-img">
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="music.html" class="nav-link">Music</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="shop.html" class="nav-link active">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Shop Section -->
+    <section id="shop" class="section">
+        <div class="container">
+        <br>
+        <br>
+            <h2 class="section-title">Shop From Our Store</h2>
+            <div class="shop-grid">
+              <!-- Product 1 -->
+<div class="product" data-category="apparel">
+    <div class="product-image">
+        <img src="img/T-shirt.jpg" alt="Signature T-Shirt">
+        <div class="product-badge">Bestseller</div>
+        <div class="product-overlay">
+            <!-- Add this quantity selector before the Add to Cart button -->
+            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                <input type="number" 
+                       class="quantity-selector" 
+                       name="quantity" 
+                       min="1" 
+                       value="1" 
+                       style="width: 50px; padding: 5px; text-align: center;">
+            </div>
+            <button class="btn btn-primary add-to-cart" 
+                    data-name="Signature T-Shirt" 
+                    data-price="49.99" 
+                    data-image="img/T-shirt.jpg">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+        </div>
+    </div>
+    <div class="product-info">
+        <h3>Signature T-Shirt</h3>
+        <p class="product-price">GH¢49.99</p>
+        <p class="description">Premium cotton t-shirt with album artwork print</p>
+    </div>
+</div>
+
+                <!-- Product 2 -->
+                <div class="product" data-category="music">
+                    <div class="product-image">
+                        <img src="img/Vnyil.jpg" alt="Vinyl Record">
+                        <div class="product-badge">Limited</div>
+                        <div class="product-overlay">
+                            <!-- Add this quantity selector before the Add to Cart button -->
+                            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                                <input type="number" 
+                                       class="quantity-selector" 
+                                       name="quantity" 
+                                       min="1" 
+                                       value="1" 
+                                       style="width: 50px; padding: 5px; text-align: center;">
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-name="Vinyl Record" data-price="34.99" data-image="img/Vnyil.jpg">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Vinyl Record</h3>
+                        <p class="product-price">GH¢34.99</p>
+                        <p class="description">Limited edition 180g vinyl with digital download</p>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product" data-category="apparel">
+                    <div class="product-image">
+                        <img src="img/hoodie.jpg" alt="Tour Hoodie">
+                        <div class="product-badge">New</div>
+                        <div class="product-overlay">
+                            <!-- Add this quantity selector before the Add to Cart button -->
+                            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                                <input type="number" 
+                                       class="quantity-selector" 
+                                       name="quantity" 
+                                       min="1" 
+                                       value="1" 
+                                       style="width: 50px; padding: 5px; text-align: center;">
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-name="Tour Hoodie" data-price="59.99" data-image="img/hoodie.jpg">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Tour Hoodie</h3>
+                        <p class="product-price">GH¢59.99</p>
+                        <p class="description">Comfortable hoodie with tour dates print</p>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product" data-category="music">
+                    <div class="product-image">
+                        <img src="img/Signed CD.jpg" alt="Signed CD">
+                        <div class="product-badge">Limited</div>
+                        <div class="product-overlay">
+                            <!-- Add this quantity selector before the Add to Cart button -->
+                            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                                <input type="number" 
+                                       class="quantity-selector" 
+                                       name="quantity" 
+                                       min="1" 
+                                       value="1" 
+                                       style="width: 50px; padding: 5px; text-align: center;">
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-name="Signed CD" data-price="24.99" data-image="img/Signed CD.jpg">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Signed CD</h3>
+                        <p class="product-price">GH¢24.99</p>
+                        <p class="description">Hand-signed CD with exclusive artwork</p>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product" data-category="apparel">
+                    <div class="product-image">
+                        <img src="img/Jerseys.jpg" alt="Custom Jersey">
+                        <div class="product-badge">Exclusive</div>
+                        <div class="product-overlay">
+                            <!-- Add this quantity selector before the Add to Cart button -->
+                            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                                <input type="number" 
+                                       class="quantity-selector" 
+                                       name="quantity" 
+                                       min="1" 
+                                       value="1" 
+                                       style="width: 50px; padding: 5px; text-align: center;">
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-name="Custom Jersey" data-price="69.99" data-image="img/Jerseys.jpg">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Custom Jersey</h3>
+                        <p class="product-price">GH¢69.99</p>
+                        <p class="description">Limited edition custom team jersey</p>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product" data-category="accessories">
+                    <div class="product-image">
+                        <img src="img/caps.jpg" alt="Logo Cap">
+                        <div class="product-badge">Sale</div>
+                        <div class="product-overlay">
+                            <!-- Add this quantity selector before the Add to Cart button -->
+                            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                                <input type="number" 
+                                       class="quantity-selector" 
+                                       name="quantity" 
+                                       min="1" 
+                                       value="1" 
+                                       style="width: 50px; padding: 5px; text-align: center;">
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-name="Logo Cap" data-price="27.99" data-image="img/caps.jpg">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Logo Cap</h3>
+                        <p class="product-price">GH¢27.99</p>
+                        <p class="description">Adjustable snapback with embroidered logo</p>
+                    </div>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product" data-category="accessories">
+                    <div class="product-image">
+                        <img src="img/Bag.jpg" alt="Bag Pack">
+                        <div class="product-badge">New</div>
+                        <div class="product-overlay">
+                            <!-- Add this quantity selector before the Add to Cart button -->
+                            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                                <input type="number" 
+                                       class="quantity-selector" 
+                                       name="quantity" 
+                                       min="1" 
+                                       value="1" 
+                                       style="width: 50px; padding: 5px; text-align: center;">
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-name="Bag Pack" data-price="99.99" data-image="img/Bag.jpg">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Bag Pack</h3>
+                        <p class="product-price">GH¢99.99</p>
+                        <p class="description">Durable backpack with screen-printed design</p>
+                    </div>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product" data-category="accessories">
+                    <div class="product-image">
+                        <img src="img/Phone case.jpg" alt="Phone Case">
+                        <div class="product-badge">Bestseller</div>
+                        <div class="product-overlay">
+                            <!-- Add this quantity selector before the Add to Cart button -->
+                            <div class="quantity-selector-container" style="margin: 10px 0; text-align: center;">
+                                <label for="quantity" style="color: white; margin-right: 5px;">Qty:</label>
+                                <input type="number" 
+                                       class="quantity-selector" 
+                                       name="quantity" 
+                                       min="1" 
+                                       value="1" 
+                                       style="width: 50px; padding: 5px; text-align: center;">
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-name="Phone Case" data-price="19.99" data-image="img/Phone case.jpg">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Phone Case</h3>
+                        <p class="product-price">GH¢19.99</p>
+                        <p class="description">Protective case for all phone models</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">JKR</div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="music.html">Music</a>
+                    <a href="videos.html">Videos</a>
+                    <a href="events.html">Events</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-legal">
+                    <p>&copy; <span id="current-year" class="current-year">2025</span> Jay Kelly Rahp. All rights reserved.</p>
+                    <div class="legal-links">
+                        <a href="privacy-policy.html">Privacy Policy</a>
+                        <span>•</span>
+                        <a href="terms.html">Terms of Service</a>
+                        <span>•</span>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="newsletter-signup">
+                        <p>Subscribe to our newsletter for updates and exclusive content</p>
+                        <form class="footer-newsletter">
+                            <input type="email" placeholder="Your email address" autocomplete="email" required>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+    <script>
+        // Set current year in footer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update year in footer if element exists
+            const yearElement = document.getElementById('current-year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+
+            // Shopping cart functionality
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product');
+            
+            // Add to cart functionality
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productCard = e.target.closest('.product');
+                    if (!productCard) return;
+                    
+                    const product = {
+                        name: productCard.querySelector('h3').textContent,
+                        price: parseFloat(productCard.querySelector('.product-price').textContent.replace(/[^0-9.-]+/g,"")),
+                        image: productCard.querySelector('img')?.src || ''
+                    };
+                    
+                    // Call the global addToCart function from main.js
+                    if (typeof window.addToCart === 'function') {
+                        window.addToCart(product);
+                    } else {
+                        // Fallback in case main.js isn't loaded
+                        console.error('addToCart function not found');
+                        window.location.href = 'checkout.html';
+                    }
+                });
+            });
+            
+            // Filter functionality
+            if (filterButtons.length > 0) {
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Update active state
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const filter = this.getAttribute('data-filter');
+                        
+                        productCards.forEach(card => {
+                            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+            }
+
+            // Initialize cart count
+            if (typeof updateCartCount === 'function') {
+                updateCartCount();
+            }
+        });
+    </script>
+</body>
+</html>

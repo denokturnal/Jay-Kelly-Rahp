@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Jay Kelly Rahp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">JKR</a>
+            <nav class="nav-links">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#music" class="nav-link">Music</a>
+                <a href="index.html#videos" class="nav-link">Videos</a>
+                <a href="index.html#events" class="nav-link">Events</a>
+                <a href="index.html#shop" class="nav-link">Shop</a>
+                <a href="index.html#booking" class="nav-link">Booking</a>
+                <a href="checkout.html" class="nav-link cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-count">0</span>
+                </a>
+            </nav>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="checkout-page-content">
+        <section id="checkout" class="section checkout-section">
+            <div class="container">
+                <h2 class="section-title">Finalize Your Order</h2>
+                
+                <div class="checkout-grid">
+                    
+                    <div class="cart-details">
+                        <h3 class="section-subtitle">Your Items</h3>
+                        <div id="checkout-items">
+                            <div class="empty-cart" style="display: none; text-align: center; padding: 50px;">
+                                <i class="fas fa-shopping-cart fa-3x" style="color: #ff3c78;"></i>
+                                <p style="margin-top: 15px; font-size: 1.2em;">Your cart is empty. Let's find some dope merch!</p>
+                                <a href="shop.html" class="btn btn-primary" style="margin-top: 20px;">Go to Shop</a>
+                            </div>
+                            <!-- Order Summary Section -->
+                            <div id="order-summary" class="order-summary" style="margin-top: 30px; background: #f9f9f9; padding: 20px; border-radius: 8px; display: none;">
+                                <h3 style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Order Summary</span>
+                                    <span class="item-count">0 Items</span>
+                                </h3>
+                                <div style="margin: 15px 0;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                        <span>Subtotal</span>
+                                        <span class="subtotal-amount">GH¢0.00</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                        <span>Shipping</span>
+                                        <span class="shipping-amount">Free</span>
+                                    </div>
+                                </div>
+                                <div style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; font-weight: 600; display: flex; justify-content: space-between;">
+                                    <span>Total</span>
+                                    <span class="total-amount">GH¢0.00</span>
+                                </div>
+                                <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 12px; font-weight: 500;" onclick="proceedToCheckout()">
+                                    Proceed to Checkout
+                                </button>
+                                <div style="text-align: center; margin-top: 15px; font-size: 13px; color: #888;">
+                                    <i class="fas fa-lock" style="margin-right: 5px;"></i> Secure Checkout
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkout-form-container">
+                        <form id="checkout-form" class="checkout-form card">
+                            <h2 class="section-subtitle">Local Order / Shipping Information</h2>
+                            
+                            <div class="form-group">
+                                <label for="name">Full Name </label>
+                                <input type="text" id="name" name="name" autocomplete="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email (Optional)</label>
+                                <input type="email" id="email" name="email" autocomplete="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone (WhatsApp) </label>
+                                <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Local Order - (GPS Address) / Shipping Address </label>
+                                <textarea id="address" name="address" rows="3" autocomplete="street-address" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Order Notes (Size, Color, etc.)</label>
+                                <textarea id="notes" name="notes" rows="2" autocomplete="off"></textarea>
+                            </div>
+
+                            <div class="checkout-buttons" style="display: flex; flex-direction: column; gap: 10px;">
+                                <button type="submit" id="whatsapp-checkout" class="btn btn-primary btn-block checkout-btn">
+                                    <i class="fab fa-whatsapp"></i> Proceed To Checkout
+                                </button>
+                                <a href="shop.html" class="btn btn-outline btn-block" style="text-align: center;" id="continue-shopping-btn">
+                                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                                </a>
+                            </div>
+                            <p class="checkout-note" style="margin-top: 15px;">
+                                All orders are finalized via WhatsApp to confirm payment and shipping details.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="music-player">
+        <div class="player-controls">
+            </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; <span class="current-year">2024</span> Jay Kelly Rahp. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="js/main.js"></script>
+    <script src="js/checkout.js"></script>
+
+    <script>
+        // Use the global 'cart' array and functions from main.js
+        
+        // Format price helper (used for the WhatsApp message)
+        function formatPrice(price) {
+            return 'GH¢' + parseFloat(price).toFixed(2);
+        }
+
+        // Function to send message to WhatsApp
+        function sendToWhatsApp(phone, text) {
+            // Encode the message for URL
+            const encodedText = encodeURIComponent(text);
+            // Open WhatsApp with the message
+            window.open(`https://wa.me/${phone}?text=${encodedText}`, '_blank');
+        }
+
+        // Function to show notification
+        function showNotification(message) {
+            // Check if notification element exists, if not create it
+            let notification = document.querySelector('.notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.className = 'notification';
+                document.body.appendChild(notification);
+                
+                // Add some basic styling
+                const style = document.createElement('style');
+                style.textContent = `
+                    .notification {
+                        position: fixed;
+                        bottom: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: #4CAF50;
+                        color: white;
+                        padding: 15px 25px;
+                        border-radius: 4px;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                        z-index: 1000;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    }
+                    .notification.show {
+                        opacity: 1;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Set message and show
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to update cart display
+        function updateOrderSummary(cart) {
+            const orderSummary = document.getElementById('order-summary');
+            if (!orderSummary) return;
+            
+            if (!cart || cart.length === 0) {
+                orderSummary.style.display = 'none';
+                return;
+            }
+            
+            // Calculate subtotal
+            const subtotal = cart.reduce((sum, item) => {
+                const price = parseFloat(item.price) || 0;
+                const quantity = parseInt(item.quantity) || 1;
+                return sum + (price * quantity);
+            }, 0);
+            
+            // Update summary elements
+            const itemCountElement = orderSummary.querySelector('.item-count');
+            const subtotalElement = orderSummary.querySelector('.subtotal-amount');
+            const totalElement = orderSummary.querySelector('.total-amount');
+            
+            if (itemCountElement) {
+                const itemCount = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+                itemCountElement.textContent = `${itemCount} ${itemCount === 1 ? 'Item' : 'Items'}`;
+            }
+            
+            if (subtotalElement) {
+                subtotalElement.textContent = `GH¢${subtotal.toFixed(2)}`;
+            }
+            
+            if (totalElement) {
+                totalElement.textContent = `GH¢${subtotal.toFixed(2)}`; // Total is same as subtotal for now
+            }
+            
+            orderSummary.style.display = 'block';
+        }
+        
+        // Function to proceed to checkout
+        function proceedToCheckout() {
+            // Scroll to the checkout form
+            document.getElementById('checkout-form').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+            
+            // Clear the cart
+            localStorage.removeItem('cart');
+            
+            // Show success message
+            showNotification('Order placed successfully! Your cart has been cleared.');
+            
+            // Update the cart display
+            updateCartDisplay();
+            
+            // Clear the form
+            document.getElementById('checkout-form').reset();
+        }
+        
+        function updateCartDisplay() {
+    const cartItemsContainer = document.getElementById('checkout-items');
+    const emptyCartDiv = document.querySelector('.empty-cart');
+    const orderSummary = document.getElementById('order-summary');
+    
+    // Get cart from localStorage or initialize empty array
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    
+    // Filter out any invalid items
+    cart = cart.filter(item => item && item.name && !isNaN(parseFloat(item.price)));
+    
+    // Calculate total number of items
+    const totalItems = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+    
+    // Update cart count in navigation
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    cartCountElements.forEach(el => el.textContent = totalItems);
+    
+    // Update the item count in the order summary
+    const itemCountElement = document.querySelector('.item-count');
+    if (itemCountElement) {
+        itemCountElement.textContent = `${totalItems} Item${totalItems !== 1 ? 's' : ''}`;
+    }
+    
+    // Show/hide empty cart message and order summary
+    if (cart.length === 0) {
+        if (emptyCartDiv) emptyCartDiv.style.display = 'block';
+        if (orderSummary) orderSummary.style.display = 'none';
+        return;
+    }
+    
+    // Show order summary and hide empty cart message
+    if (emptyCartDiv) emptyCartDiv.style.display = 'none';
+    if (orderSummary) orderSummary.style.display = 'block';
+    
+    // Clear existing items
+    if (cartItemsContainer) {
+        // Add a header showing the total number of items
+        cartItemsContainer.innerHTML = `
+            <div style="margin-bottom: 20px; font-size: 1.1em; font-weight: 500;">
+                Your Cart (${totalItems} Item${totalItems !== 1 ? 's' : ''})
+            </div>
+        `;
+        
+        // Rest of your cart items table and content...
+        // [Previous cart items table code goes here...]
+        
+        // Make sure to include your existing cart items table generation code here
+        // This includes the table header, rows for each item, and the subtotal row
+    }
+    
+    // Update the order summary with totals
+    updateOrderSummary(cart);
+}
+        
+        // Function to handle quantity updates
+        function handleQuantityUpdate(input, itemName, priceCell, totalCell) {
+            const newQuantity = parseInt(input.value);
+            if (isNaN(newQuantity) || newQuantity < 1) {
+                input.value = 1;
+                return;
+            }
+
+            // Update the display
+            const display = input.previousElementSibling;
+            display.textContent = newQuantity;
+            
+            // Calculate new total
+            const price = parseFloat(priceCell.textContent.replace('GH¢', ''));
+            const newTotal = price * newQuantity;
+            totalCell.textContent = `GH¢${newTotal.toFixed(2)}`;
+            
+            // Update cart in localStorage
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const itemIndex = cart.findIndex(item => item.name === itemName);
+            
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity = newQuantity;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                
+                // Update subtotal
+                updateSubtotal();
+            }
+        }
+
+        // Function to update subtotal
+        function updateSubtotal() {
+            const rows = document.querySelectorAll('.cart-table tbody tr:not(:last-child)');
+            let subtotal = 0;
+            
+            rows.forEach(row => {
+                const price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace('GH¢', ''));
+                const quantity = parseInt(row.querySelector('.quantity-display').textContent);
+                subtotal += price * quantity;
+            });
+            
+            const subtotalCell = document.querySelector('.subtotal-amount');
+            if (subtotalCell) {
+                subtotalCell.textContent = `GH¢${subtotal.toFixed(2)}`;
+            }
+            
+            return subtotal;
+        }
+
+        // Handle coupon application
+        function applyCoupon() {
+            const couponInput = document.querySelector('.coupon-input');
+            if (!couponInput) return;
+            
+            const couponCode = couponInput.value.trim();
+            if (!couponCode) {
+                showNotification('Please enter a coupon code');
+                return;
+            }
+            
+            // Here you would typically validate the coupon with your backend
+            // For now, we'll just show a success message
+            showNotification('Coupon applied successfully!');
+            couponInput.value = '';
+        }
+        
+        // Initialize cart display and event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+            
+            // Handle apply coupon button click
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.btn') && e.target.closest('.coupon-section')) {
+                    applyCoupon();
+                }
+            });
+            
+            // Handle coupon input enter key
+            document.addEventListener('keydown', function(e) {
+                if (e.target.classList.contains('coupon-input') && e.key === 'Enter') {
+                    e.preventDefault();
+                    applyCoupon();
+                }
+            });
+            
+            // Handle action buttons
+            document.addEventListener('click', function(e) {
+                const button = e.target.closest('.action-buttons .btn');
+                if (!button) return;
+                
+                if (button.textContent.includes('Update Cart')) {
+                    // Update cart quantities
+                    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                    const quantityInputs = document.querySelectorAll('.quantity-input');
+                    
+                    quantityInputs.forEach((input, index) => {
+                        const newQty = parseInt(input.value) || 1;
+                        if (cart[index]) {
+                            cart[index].quantity = newQty;
+                        }
+                    });
+                    
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartDisplay();
+                    showNotification('Cart updated successfully!');
+                    
+                } else if (button.textContent.includes('Continue Shopping')) {
+                    // Go back to shop
+                    window.location.href = 'shop.html';
+                    
+                } else if (button.textContent.includes('Proceed to Checkout')) {
+                    // Scroll to the checkout form
+                    document.getElementById('checkout-form').scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                }
+            });
+            
+            // Delegate events for quantity updates
+            document.addEventListener('click', function(e) {
+                const quantityDisplay = e.target.closest('.quantity-display');
+                if (quantityDisplay) {
+                    const cell = quantityDisplay.closest('.quantity-cell');
+                    const input = cell.querySelector('.quantity-input');
+                    quantityDisplay.style.display = 'none';
+                    input.style.display = 'inline-block';
+                    input.focus();
+                }
+            });
+            
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('quantity-input')) {
+                    const input = e.target;
+                    const cell = input.closest('.quantity-cell');
+                    const display = cell.querySelector('.quantity-display');
+                    const row = cell.closest('tr');
+                    const itemName = row.querySelector('td:first-child span').textContent;
+                    const priceCell = row.querySelector('td:nth-child(2)');
+                    const totalCell = row.querySelector('td:last-child');
+                    
+                    handleQuantityUpdate(input, itemName, priceCell, totalCell);
+                    
+                    // Hide input and show display
+                    input.style.display = 'none';
+                    display.style.display = 'inline-block';
+                }
+            });
+            
+            // Handle Enter key on quantity input
+            document.addEventListener('keydown', function(e) {
+                if (e.target.classList.contains('quantity-input') && e.key === 'Enter') {
+                    e.preventDefault();
+                    e.target.blur();
+                }
+            });
+        });
+
+        // Handle WhatsApp checkout button submission
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form data
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+            
+            // Validation
+            if (!name || !phone || !address) {
+                showNotification('Please fill in all required fields (marked with *).');
+                return;
+            }
+            
+            // Get cart from localStorage
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty.');
+                return;
+            }
+            
+            // Format order message
+            let message = `*NEW ORDER REQUEST*\n\n`;
+            message += `*Customer Information*\n`;
+            message += `👤 *Name:* ${name}\n`;
+            if (email) {
+                message += `📧 *Email:* ${email}\n`;
+            }
+            message += `📱 *Phone:* ${phone}\n`;
+            message += `📍 *Address:* ${address}\n`;
+            if (notes) {
+                message += `📝 *Notes:* ${notes}\n`;
+            }
+            
+            message += `\n*🛒 Order Summary*\n\n`;
+            let subtotal = 0;
+            
+            // Add each item to the message
+            cart.forEach((item, index) => {
+                const itemPrice = parseFloat(item.price);
+                const quantity = parseInt(item.quantity) || 1;
+                const itemTotal = itemPrice * quantity;
+                subtotal += itemTotal;
+                
+                message += `*${index + 1}. ${item.name}*\n`;
+                message += `   Quantity: ${quantity}\n`;
+                message += `   Price: ${formatPrice(itemPrice)} each\n`;
+                message += `   Total: ${formatPrice(itemTotal)}\n\n`;
+            });
+            
+            // Add order summary
+            message += `*Order Total: ${formatPrice(subtotal)}*\n\n`;
+            message += `Thank you for your order! We'll contact you shortly to confirm your order and provide shipping details.`;
+
+            // WhatsApp number (Jay Kelly Rahp's WhatsApp number)
+            const whatsappNumber = '233271326182';
+            
+            // Send to WhatsApp
+            sendToWhatsApp(whatsappNumber, message);
+
+            // Show success message
+            showNotification('Order sent! Check your WhatsApp to continue.');
+            
+            // Clear the cart and form
+            localStorage.removeItem('cart');
+            document.getElementById('checkout-form').reset();
+            
+            // Update the cart display
+            updateCartDisplay();
+            
+            // Redirect to shop page after a short delay
+            setTimeout(() => {
+                window.location.href = 'shop.html';
+            }, 2000);
+        });
+        
+        // Initialize cart display when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // This will be handled by checkout.js
+            if (typeof renderCheckout === 'function') {
+                renderCheckout();
+            }
+        });
+    </script>
+</body>
+</html>

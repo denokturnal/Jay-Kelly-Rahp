@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Jay Kelly Rahp</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player">
+        <audio id="audio-player"></audio>
+        <div class="player-container">
+            <div class="now-playing">
+                <img id="now-playing-art" src="" alt="Now Playing" class="now-playing-art">
+                <div class="track-info">
+                    <h4 id="now-playing-title">Not Playing</h4>
+                    <p id="now-playing-artist">Jay Kelly Rahp</p>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button id="prev-btn" class="control-btn" title="Previous">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button id="play-pause-btn" class="control-btn play-pause" title="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="next-btn" class="control-btn" title="Next">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div class="progress-container">
+                <span id="current-time">0:00</span>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                    <input type="range" id="progress" class="progress-slider" min="0" max="100" value="0">
+                </div>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="volume-container">
+                <i class="fas fa-volume-up volume-icon"></i>
+                <input type="range" id="volume" class="volume-slider" min="0" max="100" value="70">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo-container">
+                <div class="logo-circle">
+                    <img src="img/JKR logo.jpg" alt="JKR Logo" class="logo-img">
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="music.html" class="nav-link">Music</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
+            </div>
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <br>
+            <br>
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-form-container">
+                    <div class="booking-form">
+                        <h3>Book Jay Kelly Rahp</h3>
+                        <form id="bookingForm" action="https://formspree.io/f/xrbonnyo" 
+                        method="POST" data-email="Krahpconect@gmail.com">
+                            <div class="form-group">
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" name="name" autocomplete="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" autocomplete="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-type">Event Type</label>
+                                <select id="event-type" name="event-type" required>
+                                    <option value="">Select event type</option>
+                                    <option value="concert">Concert</option>
+                                    <option value="festival">Festival</option>
+                                    <option value="private-event">Private Event</option>
+                                    <option value="corporate">Corporate Event</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-date">Event Date</label>
+                                <input type="date" id="event-date" name="event-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="budget">Budget Range</label>
+                                <select id="budget" name="budget" required>
+                                    <option value="">Select budget range</option>
+                                    <option value="under-1000">Under GH¢1,000</option>
+                                    <option value="1000-5000">GH¢1,000 - GH¢5,000</option>
+                                    <option value="5000-10000">GH¢5,000 - GH¢10,000</option>
+                                    <option value="10000+">GH¢10,000+</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="message">Event Details</label>
+                                <textarea id="message" name="message" rows="4" placeholder="Tell us about your event..." autocomplete="off" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="button-text">Send Booking Request</span>
+                                <span class="spinner" style="display: none;">Sending...</span>
+                            </button>
+                            <p id="form-status" class="form-status"></p>
+                        </form>
+                    </div>
+                    
+                    <div class="newsletter">
+                        <h3>Join the Mailing List</h3>
+                        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thank you for subscribing!'); this.reset();">
+                            <input type="email" id="newsletter-email" placeholder="Your email address" autocomplete="email" required>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="https://www.instagram.com/jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #E1306C" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/kellyrahp" target="_blank" class="social-icon" style="--hover-color: #1DA1F2" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.youtube.com/@jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #FF0000" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://open.spotify.com/artist/47vQZxH7rVmJEUVmRYr5w8" target="_blank" class="social-icon" style="--hover-color: #1DB954" title="Spotify"><i class="fab fa-spotify"></i></a>
+                    <a href="https://wa.me/233271326182" target="_blank" class="social-icon" style="--hover-color: #25D366" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.tiktok.com/@jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #000000" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://music.apple.com/gh/artist/jay-kelly-rahp/1149914183" target="_blank" class="social-icon" style="--hover-color: #FC3C44" title="Apple Music"><i class="fab fa-apple"></i></a>
+                    <a href="https://audiomack.com/jay-kelly-rahp" target="_blank" class="social-icon" style="--hover-color: #FFA200" title="Audiomack"><img src="img/audiomack-icon.png" alt="Audiomack" style="width: 24px; height: 24px; object-fit: contain;"></a>
+                    <a href="https://www.deezer.com/en/artist/10934640" target="_blank" class="social-icon" style="--hover-color: #00C7F2" title="Deezer"><i class="fab fa-deezer"></i></a>
+                    <a href="https://www.facebook.com/jaykellyrahp" target="_blank" class="social-icon" style="--hover-color: #1877F2" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">JKR</div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="music.html">Music</a>
+                    <a href="videos.html">Videos</a>
+                    <a href="events.html">Events</a>
+                    <a href="shop.html">Shop</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-legal">
+                    <p>&copy; <span id="current-year" class="current-year">2025</span> Jay Kelly Rahp. All rights reserved.</p>
+                    <div class="legal-links">
+                        <a href="privacy-policy.html">Privacy Policy</a>
+                        <span>•</span>
+                        <a href="terms.html">Terms of Service</a>
+                        <span>•</span>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="newsletter-signup">
+                        <p>Subscribe to our newsletter for updates and exclusive content</p>
+                        <form class="footer-newsletter">
+                            <input type="email" placeholder="Your email address" autocomplete="email" required>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Handle contact form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('bookingForm');
+            if (!form) return;
+            
+            const formStatus = document.getElementById('form-status');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const buttonText = form.querySelector('.button-text');
+            const spinner = form.querySelector('.spinner');
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                if (buttonText) buttonText.style.display = 'none';
+                if (spinner) spinner.style.display = 'inline';
+                if (submitButton) submitButton.disabled = true;
+                
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        formStatus.textContent = 'Thank you for your booking request! We will get back to you soon.';
+                        formStatus.style.color = '#4CAF50';
+                        form.reset();
+                    } else {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || 'Form submission failed');
+                    }
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    formStatus.textContent = 'Oops! There was a problem sending your message. Please try again later or contact us directly at Krahpconect@gmail.com';
+                    formStatus.style.color = '#f44336';
+                } finally {
+                    // Reset button state
+                    if (buttonText) buttonText.style.display = 'inline';
+                    if (spinner) spinner.style.display = 'none';
+                    if (submitButton) submitButton.disabled = false;
+                    
+                    // Scroll to show status message
+                    formStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+    </script>
+    <style>
+        .form-status {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .spinner {
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+    </style>
+    <script>
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Form submission handlers
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your booking request! We will get back to you soon.');
+            this.reset();
+        });
+        
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for subscribing to our newsletter!');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

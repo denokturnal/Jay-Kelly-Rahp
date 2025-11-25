@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Kelly Rahp | Official Website</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Music Player -->
+    <div class="music-player">
+        <audio id="audio-player"></audio>
+        <div class="player-container">
+            <div class="now-playing">
+                <img id="now-playing-art" src="" alt="Now Playing" class="now-playing-art">
+                <div class="track-info">
+                    <h4 id="now-playing-title">Not Playing</h4>
+                    <p id="now-playing-artist">Jay Kelly Rahp</p>
+                </div>
+            </div>
+            <div class="player-controls">
+                <button id="prev-btn" class="control-btn" title="Previous">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button id="play-pause-btn" class="control-btn play-pause" title="Play/Pause">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="next-btn" class="control-btn" title="Next">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div class="progress-container">
+                <span id="current-time">0:00</span>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                    <input type="range" id="progress" class="progress-slider" min="0" max="100" value="0">
+                </div>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="volume-container">
+                <i class="fas fa-volume-up volume-icon"></i>
+                <input type="range" id="volume" class="volume-slider" min="0" max="100" value="70">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo-container">
+                <div class="logo-circle">
+                    <img src="img/JKR logo.jpg" alt="JKR Logo" class="logo-img">
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="music.html" class="nav-link">Music</a>
+                <a href="videos.html" class="nav-link">Videos</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="shop.html" class="nav-link">Shop</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </div>
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content will be inserted here by individual pages -->
+    <main id="content">
+        <!-- Content will be loaded here -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-circle">
+                        <img src="img/JKR logo.jpg" alt="JKR Logo" class="logo-img">
+                    </div>
+                    <p>Jay Kelly Rahp</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="music.html">Music</a></li>
+                        <li><a href="videos.html">Videos</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Connect With Me</h4>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/jaykellyrahp" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/kellyrahp" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/@jaykellyrahp" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="https://open.spotify.com/artist/47vQZxH7rVmJEUVmRYr5w8?si=DL0UPCbCSt6NJ_RTIdfLwQ" target="_blank"><i class="fab fa-spotify"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year"></span> Jay Kelly Rahp. All Rights Reserved.</p>
+                <div class="legal-links">
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <span>|</span>
+                    <a href="terms-of-service.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+    <script>
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
