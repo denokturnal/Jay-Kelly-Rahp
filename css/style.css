@@ -209,39 +209,112 @@ img {
     transition: var(--transition);
 }
 
-.nav-link:hover::after {
-    width: 100%;
-}
-
-/* Mobile Menu */
+/* Mobile Menu Button */
 .hamburger {
-    display: none;
+    display: none; /* Hidden by default on desktop */
     flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 21px;
+    justify-content: space-around;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 4px;
     cursor: pointer;
-    z-index: 1001;
+    padding: 0.5rem;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
-.bar {
+.hamburger:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+}
+
+.hamburger .bar {
+    display: block;
     width: 100%;
-    height: 3px;
-    background-color: white;
-    border-radius: 3px;
-    transition: var(--transition);
+    height: 2px;
+    background: var(--primary-accent);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+    opacity: 1;
 }
 
-.hamburger.active .bar:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
+/* Active state for hamburger icon */
+.hamburger[aria-expanded="true"] .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
 }
 
-.hamburger.active .bar:nth-child(2) {
+.hamburger[aria-expanded="true"] .bar:nth-child(2) {
     opacity: 0;
+    transform: translateX(-20px);
 }
 
-.hamburger.active .bar:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
+.hamburger[aria-expanded="true"] .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Navigation Links */
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+/* Mobile menu styles */
+@media (max-width: 992px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--card-bg);
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 6rem 2rem 2rem;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out;
+        z-index: 999;
+        overflow-y: auto;
+    }
+
+    .nav-links[aria-expanded="true"] {
+        transform: translateX(-100%);
+    }
+
+    .nav-link {
+        width: 100%;
+        padding: 1rem 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Overlay when menu is open */
+    .nav-overlay {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .nav-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+    }
 }
 
 /* Hero Section */

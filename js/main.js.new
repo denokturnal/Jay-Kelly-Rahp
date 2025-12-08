@@ -1,0 +1,580 @@
+/**
+ * Main JavaScript File
+ * Handles mobile menu, audio player, cart functionality, and other UI interactions
+ */
+
+// Global variables
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+/**
+ * Utility Functions
+ */
+const Utils = {
+    // Format price as currency
+    formatPrice: (price) => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(price);
+    },
+
+    // Save cart to localStorage
+    saveCart: () => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+    },
+
+    // Open WhatsApp with message
+    sendToWhatsApp: (phoneNumber, message) => {
+        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    },
+
+    // Update cart count in UI
+    updateCartCount: () => {
+        const count = cart.reduce((total, item) => total + (parseInt(item.quantity) || 1), 0);
+        const cartCounts = document.querySelectorAll('.cart-count');
+        cartCounts.forEach(el => {
+            el.textContent = count;
+            el.style.display = count > 0 ? 'flex' : 'none';
+        });
+    }
+};
+
+/**
+ * Mobile Menu Class
+ */
+class MobileMenu {
+    constructor() {
+        this.hamburger = document.querySelector('.hamburger');
+        this.navLinks = document.getElementById('navbarContent');
+        this.overlay = document.createElement('div');
+        this.isOpen = false;
+        
+        if (this.hamburger && this.navLinks) {
+            this.init();
+        }
+    }
+    
+    init() {
+        // Set initial ARIA attributes
+        this.hamburger.setAttribute('aria-expanded', 'false');
+        this.hamburger.setAttribute('aria-controls', 'navbarContent');
+        this.navLinks.setAttribute('aria-expanded', 'false');
+        
+        // Create and append overlay
+        this.overlay.classList.add('nav-overlay');
+        document.body.appendChild(this.overlay);
+        
+        // Add event listeners
+        this.hamburger.addEventListener('click', (e) => this.toggleMenu(e));
+        this.overlay.addEventListener('click', () => this.closeMenu());
+        
+        // Close when clicking on nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => this.closeMenu());
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen) {
+                this.closeMenu();
+            }
+        });
+    }
+    
+    toggleMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.isOpen ? this.closeMenu() : this.openMenu();
+    }
+    
+    openMenu() {
+        this.hamburger.setAttribute('aria-expanded', 'true');
+        this.navLinks.setAttribute('aria-expanded', 'true');
+        this.overlay.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+        this.isOpen = true;
+        this.navLinks.classList.add('active');
+        this.hamburger.classList.add('active');
+    }
+    
+    closeMenu() {
+        this.hamburger.setAttribute('aria-expanded', 'false');
+        this.navLinks.setAttribute('aria-expanded', 'false');
+        this.overlay.classList.remove('visible');
+        document.body.style.overflow = '';
+        this.isOpen = false;
+        this.navLinks.classList.remove('active');
+        this.hamburger.classList.remove('active');
+    }
+}
+
+/**
+ * Audio Player Class
+ */
+class AudioPlayer {
+    constructor() {
+        this.audio = null;
+        this.currentTrack = null;
+        this.isPlaying = false;
+        this.volume = 0.7;
+        this.currentTime = 0;
+        this.duration = 0;
+        this.progressInterval = null;
+        this.playlist = [];
+        this.currentTrackIndex = -1;
+        
+        this.initElements();
+        this.initEventListeners();
+        this.initKeyboardShortcuts();
+        this.initPlaylist();
+    }
+    
+    // Initialize DOM elements
+    initElements() {
+        this.audioElement = document.getElementById('audio-player');
+        this.playPauseBtn = document.getElementById('play-pause-btn');
+        this.prevBtn = document.getElementById('prev-btn');
+        this.nextBtn = document.getElementById('next-btn');
+        this.progressBar = document.querySelector('.progress');
+        this.progressSlider = document.getElementById('progress');
+        this.volumeSlider = document.getElementById('volume');
+        this.currentTimeEl = document.getElementById('current-time');
+        this.durationEl = document.getElementById('duration');
+        this.nowPlayingTitle = document.getElementById('now-playing-title');
+        this.nowPlayingArtist = document.getElementById('now-playing-artist');
+        this.nowPlayingArt = document.getElementById('now-playing-art');
+        this.musicPlayer = document.querySelector('.music-player');
+    }
+    
+    // Initialize event listeners
+    initEventListeners() {
+        if (this.playPauseBtn) {
+            this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+        }
+        
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => this.prev());
+        }
+        
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => this.next());
+        }
+        
+        if (this.progressSlider) {
+            this.progressSlider.addEventListener('input', (e) => {
+                this.seekToPercentage(parseInt(e.target.value));
+            });
+        }
+        
+        if (this.volumeSlider) {
+            this.volumeSlider.addEventListener('input', (e) => {
+                this.setVolume(parseInt(e.target.value) / 100);
+            });
+        }
+    }
+    
+    // Initialize keyboard shortcuts
+    initKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                this.togglePlayPause();
+            }
+            if (e.code === 'ArrowRight') this.seekTo(this.audio.currentTime + 5);
+            if (e.code === 'ArrowLeft') this.seekTo(this.audio.currentTime - 5);
+            if (e.code === 'ArrowUp') this.setVolume(Math.min(this.volume + 0.1, 1));
+            if (e.code === 'ArrowDown') this.setVolume(Math.max(this.volume - 0.1, 0));
+        });
+    }
+    
+    // Initialize playlist from the page
+    initPlaylist() {
+        const tracks = document.querySelectorAll('[data-track]');
+        this.playlist = Array.from(tracks).map(track => ({
+            title: track.getAttribute('data-title') || 'Unknown Track',
+            artist: track.getAttribute('data-artist') || 'Unknown Artist',
+            cover: track.getAttribute('data-cover') || '',
+            src: track.getAttribute('data-src') || ''
+        }));
+        
+        // Set up track click handlers
+        tracks.forEach((track, index) => {
+            track.addEventListener('click', () => this.play(track.getAttribute('data-src'), index));
+        });
+    }
+    
+    // Play a track
+    play(trackUrl, index = -1) {
+        if (index >= 0) {
+            this.currentTrackIndex = index;
+            this.currentTrack = this.playlist[index];
+        }
+        
+        if (!this.audio) {
+            this.audio = new Audio(trackUrl);
+            this.audio.volume = this.volume;
+            
+            this.audio.addEventListener('timeupdate', () => this.updateProgressBar());
+            this.audio.addEventListener('ended', () => this.next());
+            this.audio.addEventListener('loadedmetadata', () => {
+                this.duration = this.audio.duration;
+                this.durationEl.textContent = this.formatTime(this.duration);
+            });
+        } else {
+            this.audio.src = trackUrl;
+        }
+        
+        this.audio.play()
+            .then(() => {
+                this.isPlaying = true;
+                this.updatePlayButtons();
+                this.updateNowPlaying();
+            })
+            .catch(error => this.handlePlaybackError(this.currentTrack, error));
+    }
+    
+    // Pause playback
+    pause() {
+        if (this.audio) {
+            this.audio.pause();
+            this.isPlaying = false;
+            this.updatePlayButtons();
+        }
+    }
+    
+    // Toggle play/pause
+    togglePlayPause() {
+        if (this.isPlaying) {
+            this.pause();
+        } else if (this.audio) {
+            this.audio.play()
+                .then(() => {
+                    this.isPlaying = true;
+                    this.updatePlayButtons();
+                })
+                .catch(error => this.handlePlaybackError(this.currentTrack, error));
+        } else if (this.playlist.length > 0) {
+            this.play(this.playlist[0].src, 0);
+        }
+    }
+    
+    // Play next track
+    next() {
+        if (this.playlist.length === 0) return;
+        
+        this.currentTrackIndex = (this.currentTrackIndex + 1) % this.playlist.length;
+        const nextTrack = this.playlist[this.currentTrackIndex];
+        this.play(nextTrack.src, this.currentTrackIndex);
+    }
+    
+    // Play previous track
+    prev() {
+        if (this.playlist.length === 0) return;
+        
+        this.currentTrackIndex = (this.currentTrackIndex - 1 + this.playlist.length) % this.playlist.length;
+        const prevTrack = this.playlist[this.currentTrackIndex];
+        this.play(prevTrack.src, this.currentTrackIndex);
+    }
+    
+    // Set volume (0-1)
+    setVolume(volume) {
+        this.volume = Math.min(1, Math.max(0, volume));
+        if (this.audio) {
+            this.audio.volume = this.volume;
+        }
+        if (this.volumeSlider) {
+            this.volumeSlider.value = this.volume * 100;
+        }
+    }
+    
+    // Seek to specific time (in seconds)
+    seekTo(time) {
+        if (this.audio) {
+            this.audio.currentTime = Math.max(0, Math.min(time, this.duration));
+            this.updateProgressBar();
+        }
+    }
+    
+    // Seek to percentage (0-100)
+    seekToPercentage(percent) {
+        if (this.audio) {
+            const time = (percent / 100) * this.duration;
+            this.seekTo(time);
+        }
+    }
+    
+    // Update progress bar
+    updateProgressBar() {
+        if (!this.audio) return;
+        
+        this.currentTime = this.audio.currentTime;
+        const progress = (this.currentTime / this.duration) * 100;
+        
+        if (this.progressBar) {
+            this.progressBar.style.width = `${progress}%`;
+        }
+        
+        if (this.progressSlider) {
+            this.progressSlider.value = progress;
+        }
+        
+        this.currentTimeEl.textContent = this.formatTime(this.currentTime);
+    }
+    
+    // Format time (seconds to MM:SS)
+    formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+    
+    // Update play/pause buttons
+    updatePlayButtons() {
+        if (!this.playPauseBtn) return;
+        
+        const icon = this.playPauseBtn.querySelector('i');
+        if (this.isPlaying) {
+            icon.classList.remove('fa-play');
+            icon.classList.add('fa-pause');
+        } else {
+            icon.classList.remove('fa-pause');
+            icon.classList.add('fa-play');
+        }
+    }
+    
+    // Update now playing info
+    updateNowPlaying(trackInfo = null) {
+        const track = trackInfo || this.currentTrack;
+        if (!track) return;
+        
+        if (this.nowPlayingTitle) {
+            this.nowPlayingTitle.textContent = track.title;
+        }
+        
+        if (this.nowPlayingArtist) {
+            this.nowPlayingArtist.textContent = track.artist;
+        }
+        
+        if (this.nowPlayingArt) {
+            this.nowPlayingArt.src = track.cover || 'path/to/default-cover.jpg';
+            this.nowPlayingArt.alt = `${track.title} - ${track.artist}`;
+        }
+    }
+    
+    // Handle playback errors
+    handlePlaybackError(trackInfo, error) {
+        console.error('Playback error:', error);
+        // Show error message to user
+        if (this.nowPlayingTitle) {
+            this.nowPlayingTitle.textContent = 'Error playing track';
+        }
+        if (this.nowPlayingArtist) {
+            this.nowPlayingArtist.textContent = 'Click to try again';
+        }
+        
+        // Reset player state
+        this.isPlaying = false;
+        this.updatePlayButtons();
+    }
+}
+
+/**
+ * Cart Functionality
+ */
+const Cart = {
+    // Add item to cart
+    addToCart: (e) => {
+        const addToCartBtn = e.target.closest('.add-to-cart');
+        if (!addToCartBtn) return;
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const product = addToCartBtn.closest('.product');
+        const productId = product.getAttribute('data-id');
+        const productName = product.getAttribute('data-name') || 'Product';
+        const productPrice = parseFloat(product.getAttribute('data-price')) || 0;
+        const productImage = product.querySelector('img')?.src || '';
+        
+        // Check if item already in cart
+        const existingItem = cart.find(item => item.id === productId);
+        
+        if (existingItem) {
+            existingItem.quantity = (existingItem.quantity || 1) + 1;
+        } else {
+            cart.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                image: productImage,
+                quantity: 1
+            });
+        }
+        
+        // Update UI
+        Utils.saveCart();
+        showNotification(`${productName} added to cart`);
+    },
+    
+    // Remove item from cart
+    removeFromCart: (index) => {
+        if (index >= 0 && index < cart.length) {
+            const item = cart[index];
+            cart.splice(index, 1);
+            Utils.saveCart();
+            showNotification(`${item.name} removed from cart`);
+            return true;
+        }
+        return false;
+    },
+    
+    // Update cart display
+    updateCartDisplay: () => {
+        const cartItemsContainer = document.getElementById('cart-items');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const cartTotal = document.getElementById('cart-total');
+        
+        if (!cartItemsContainer) return;
+        
+        if (cart.length === 0) {
+            if (emptyCartMessage) emptyCartMessage.style.display = 'block';
+            if (cartTotal) cartTotal.style.display = 'none';
+            cartItemsContainer.innerHTML = '';
+            return;
+        }
+        
+        if (emptyCartMessage) emptyCartMessage.style.display = 'none';
+        if (cartTotal) cartTotal.style.display = 'block';
+        
+        // Render cart items
+        cartItemsContainer.innerHTML = cart.map((item, index) => `
+            <div class="cart-item" data-id="${item.id}">
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-details">
+                    <h4>${item.name}</h4>
+                    <p>${Utils.formatPrice(item.price)} x ${item.quantity || 1}</p>
+                    <button class="remove-from-cart" data-index="${index}">Remove</button>
+                </div>
+            </div>
+        `).join('');
+        
+        // Add event listeners to remove buttons
+        document.querySelectorAll('.remove-from-cart').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                Cart.removeFromCart(index);
+                Cart.updateCartDisplay();
+            });
+        });
+        
+        // Update total
+        if (cartTotal) {
+            const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            cartTotal.querySelector('span').textContent = Utils.formatPrice(total);
+        }
+    }
+};
+
+/**
+ * Notification System
+ */
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Trigger reflow
+    notification.offsetHeight;
+    
+    // Add show class
+    notification.classList.add('show');
+    
+    // Remove after delay
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+/**
+ * Initialize the application
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize mobile menu
+    if (document.querySelector('.hamburger') && document.getElementById('navbarContent')) {
+        new MobileMenu();
+    }
+    
+    // Initialize audio player if on a page with player
+    if (document.getElementById('audio-player')) {
+        const audioPlayer = new AudioPlayer();
+        window.audioPlayer = audioPlayer; // Make available globally if needed
+    }
+    
+    // Initialize cart functionality
+    document.addEventListener('click', Cart.addToCart);
+    
+    // Update cart display if on cart page
+    if (document.getElementById('cart-items')) {
+        Cart.updateCartDisplay();
+    }
+    
+    // Initialize smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        if (window.location.pathname === anchor.pathname || anchor.pathname === '/') {
+            anchor.addEventListener('click', (e) => {
+                const targetId = anchor.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Update URL without page jump
+                    if (history.pushState) {
+                        history.pushState(null, null, targetId);
+                    } else {
+                        window.location.hash = targetId;
+                    }
+                }
+            });
+        }
+    });
+    
+    // Add animation on scroll
+    const animateOnScroll = () => {
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            if (elementTop < windowHeight - 100) {
+                element.classList.add('animated');
+            }
+        });
+    };
+    
+    // Initial animation check
+    animateOnScroll();
+    
+    // Listen for scroll events
+    window.addEventListener('scroll', () => {
+        animateOnScroll();
+    });
+});
+
+// Add animation classes to elements
+document.querySelectorAll('.album, .video-item, .event-card, .product').forEach(el => {
+    el.classList.add('animate-on-scroll');
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+});

@@ -39,10 +39,10 @@
                 
                 <div class="checkout-grid">
                     <div class="cart-details">
-                        <h3 class="section-subtitle">Your Cart is empty, add some dope Items from our shop</h3>
+                        <h3 class="section-subtitle" id="empty-cart-message" style="display: none;">Your cart is empty. Let's find some dope merch!</h3>
                         <div id="checkout-items">
                             <div class="empty-cart" style="display: none; text-align: center; padding: 50px;">
-                                <i class="fas fa-shopping-cart fa-3x" style="color: #ff3c78;"></i>
+                                <i class="fas fa-shopping-cart fa-3x" style="color: #143df5;"></i>
                                 <p style="margin-top: 15px; font-size: 1.2em;">Your cart is empty. Let's find some dope merch!</p>
                                 <a href="shop.html" class="btn btn-primary" style="margin-top: 20px;">Go to Shop</a>
                             </div>
@@ -104,9 +104,6 @@
                                     <i class="fas fa-arrow-left"></i> Continue Shopping
                                 </a>
                             </div>
-                            <p class="checkout-note">
-                                All orders are finalized via WhatsApp to confirm payment and shipping details.
-                            </p>
                         </form>
                     </div>
                 </div>
@@ -121,7 +118,38 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; <span class="current-year">2024</span> Jay Kelly Rahp. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="footer-logo">JKR</div>
+                <div class="footer-links">
+                    <a href="index.html#home">Home</a>
+                    <a href="index.html#music">Music</a>
+                    <a href="index.html#videos">Videos</a>
+                    <a href="index.html#events">Events</a>
+                    <a href="index.html#shop">Shop</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="footer-legal">
+                    <p>&copy; <span id="current-year" class="current-year">2025</span> Jay Kelly Rahp. All rights reserved.</p>
+                    <div class="legal-links">
+                        <a href="privacy-policy.html">Privacy Policy</a>
+                        <span>•</span>
+                        <a href="terms.html">Terms of Service</a>
+                        <span>•</span>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="newsletter-signup">
+                        <p>Subscribe to our newsletter for updates and exclusive content</p>
+                        <form class="footer-newsletter" id="newsletterForm" action="https://formspree.io/f/xrbonnyo" method="POST">
+                            <input type="hidden" name="_subject" value="New Newsletter Subscription">
+                            <input type="email" name="email" placeholder="Your email address" autocomplete="email" required>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="button-text">Subscribe</span>
+                                <span class="spinner" style="display: none;">Sending...</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
     
@@ -248,10 +276,25 @@
         function updateCartDisplay() {
             const cartItemsContainer = document.getElementById('checkout-items');
             const emptyCartDiv = document.querySelector('.empty-cart');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
             const orderSummary = document.getElementById('order-summary');
             
             // Get cart from localStorage or initialize empty array
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Show/hide empty cart message
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                emptyCartDiv.style.display = 'block';
+                cartItemsContainer.innerHTML = '';
+                cartItemsContainer.appendChild(emptyCartDiv);
+                orderSummary.style.display = 'none';
+                return;
+            } else {
+                emptyCartMessage.style.display = 'none';
+                emptyCartDiv.style.display = 'none';
+                orderSummary.style.display = 'block';
+            }
             
             // Filter out any invalid items and remove duplicates
             const seenItems = new Map();
@@ -385,6 +428,48 @@
                 
                 // Update subtotal
                 updateSubtotal();
+            }
+        }
+
+        // Function to remove item from cart
+        function removeFromCart(itemName) {
+            // Get current cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Filter out the item to be removed
+            const initialCount = cart.length;
+            cart = cart.filter(item => item.name !== itemName);
+            
+            // Only update if something was actually removed
+            if (cart.length < initialCount) {
+                // Save the updated cart back to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+                
+                // Update the cart display and order summary
+                updateCartDisplay();
+                updateOrderSummary(cart);
+                
+                // Update cart count in navigation
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(el => {
+                    const newCount = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+                    el.textContent = newCount;
+                    el.style.display = newCount > 0 ? 'flex' : 'none';
+                });
+                
+                // Show notification
+                showNotification('Item removed from cart');
+                
+                // If cart is now empty, show empty cart message
+                if (cart.length === 0) {
+                    const emptyCartDiv = document.querySelector('.empty-cart');
+                    const emptyCartMessage = document.getElementById('empty-cart-message');
+                    const orderSummary = document.getElementById('order-summary');
+                    
+                    if (emptyCartDiv) emptyCartDiv.style.display = 'block';
+                    if (emptyCartMessage) emptyCartMessage.style.display = 'block';
+                    if (orderSummary) orderSummary.style.display = 'none';
+                }
             }
         }
 
