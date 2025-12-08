@@ -1,11 +1,364 @@
 // WhatsApp Integration Functions
 function sendToWhatsApp(phoneNumber, message) {
-    // Format phone number (remove any non-numeric characters)
-    const formattedNumber = phoneNumber.replace(/\D/g, '');
-    // Encode the message for URL
-    const encodedMessage = encodeURIComponent(message);
-    // Open WhatsApp with the message
-    window.open(`https://wa.me/${formattedNumber}?text=${encodedMessage}`, '_blank');
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}
+
+// Shopping Cart
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Save cart to localStorage
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+}
+
+// Format price helper function
+function formatPrice(price) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(price);
+}
+
+// Audio Player Class
+class AudioPlayer {
+    constructor() {
+        this.audio = null;
+        this.currentTrack = null;
+        this.isPlaying = false;
+        this.volume = 0.7; // Default volume
+        this.currentTime = 0;
+        this.duration = 0;
+        this.progressInterval = null;
+        this.playlist = [];
+        this.currentTrackIndex = -1;
+        
+        // Initialize UI elements
+        this.audioElement = document.getElementById('audio-player');
+        this.playPauseBtn = document.getElementById('play-pause-btn');
+        this.prevBtn = document.getElementById('prev-btn');
+        this.nextBtn = document.getElementById('next-btn');
+        this.progressBar = document.querySelector('.progress');
+        this.progressSlider = document.getElementById('progress');
+        this.volumeSlider = document.getElementById('volume');
+        this.currentTimeEl = document.getElementById('current-time');
+        this.durationEl = document.getElementById('duration');
+        this.nowPlayingTitle = document.getElementById('now-playing-title');
+        this.nowPlayingArtist = document.getElementById('now-playing-artist');
+        this.nowPlayingArt = document.getElementById('now-playing-art');
+        this.musicPlayer = document.querySelector('.music-player');
+        
+        // Initialize event listeners
+        this.initEventListeners();
+        this.initKeyboardShortcuts();
+        
+        // Initialize playlist from the page
+        this.initPlaylist();
+    }
+    
+    // ... (rest of the AudioPlayer methods remain the same)
+    
+    play(trackUrl, index = -1) {
+        // Implementation remains the same
+        if (index >= 0) this.currentTrackIndex = index;
+        
+        // If it's a new track or the audio hasn't been created yet
+        if (!this.audio || this.currentTrack !== trackUrl) {
+            this.currentTrack = trackUrl;
+            
+            // Create new audio element if it doesn't exist
+            if (!this.audio) {
+                this.audio = new Audio();
+                this.audio.volume = this.volume;
+                
+                // Set up event listeners for the new audio element
+                this.audio.addEventListener('timeupdate', () => this.updateProgressBar());
+                this.audio.addEventListener('loadedmetadata', () => {
+                    this.duration = this.audio.duration;
+                    this.updateDurationDisplay();
+                });
+                this.audio.addEventListener('ended', () => this.next());
+                this.audio.addEventListener('error', (e) => {
+                    console.error('Audio playback error:', e);
+                    this.handlePlaybackError(trackUrl);
+                });
+            }
+            
+            // Set the new source
+            this.audio.src = trackUrl;
+            
+            // Update now playing info
+            this.updateNowPlaying();
+        }
+        
+        // Play the audio
+        this.audio.play()
+            .then(() => {
+                this.isPlaying = true;
+                this.updatePlayButtons();
+                this.startProgressTracking();
+            })
+            .catch(error => {
+                console.error('Error playing audio:', error);
+                this.handlePlaybackError(trackUrl);
+            });
+    }
+    
+    pause() {
+        if (this.audio) {
+            this.audio.pause();
+            this.isPlaying = false;
+            this.updatePlayButtons();
+            this.stopProgressTracking();
+        }
+    }
+    
+    togglePlayPause() {
+        if (this.isPlaying) {
+            this.pause();
+        } else {
+            this.play(this.currentTrack);
+        }
+    }
+    
+    setVolume(volume) {
+        this.volume = volume;
+        if (this.audio) {
+            this.audio.volume = volume;
+        }
+    }
+    
+    seekTo(time) {
+        if (this.audio) {
+            this.audio.currentTime = time;
+        }
+    }
+    
+    seekToPercentage(percent) {
+        if (this.audio && this.duration) {
+            const time = (percent / 100) * this.duration;
+            this.seekTo(time);
+        }
+    }
+    
+    startProgressTracking() {
+        this.stopProgressTracking();
+        this.progressInterval = setInterval(() => this.updateProgressBar(), 1000);
+    }
+    
+    stopProgressTracking() {
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.progressInterval = null;
+        }
+    }
+    
+    updateProgressBar() {
+        if (this.audio) {
+            this.currentTime = this.audio.currentTime;
+            this.updateCurrentTimeDisplay();
+            
+            if (this.progressSlider) {
+                const progress = (this.currentTime / this.duration) * 100 || 0;
+                this.progressSlider.value = progress;
+                
+                if (this.progressBar) {
+                    this.progressBar.style.width = `${progress}%`;
+                }
+            }
+        }
+    }
+    
+    updateCurrentTimeDisplay() {
+        if (this.currentTimeEl) {
+            this.currentTimeEl.textContent = this.formatTime(this.currentTime);
+        }
+    }
+    
+    updateDurationDisplay() {
+        if (this.durationEl) {
+            this.durationEl.textContent = this.formatTime(this.duration);
+        }
+    }
+    
+    updateVolumeUI() {
+        if (this.volumeSlider) {
+            this.volumeSlider.value = this.volume * 100;
+        }
+    }
+    
+    formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+    
+    getCurrentTrack() {
+        return this.playlist[this.currentTrackIndex] || null;
+    }
+    
+    showNotification(message) {
+        // Implementation for showing notifications
+        console.log(message);
+    }
+    
+    updatePlayButtons() {
+        // Update play/pause buttons throughout the page
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            const album = btn.closest('.album');
+            if (album) {
+                const trackUrl = album.dataset.trackUrl;
+                if (trackUrl === this.currentTrack && this.isPlaying) {
+                    btn.innerHTML = '<i class="fas fa-pause"></i>';
+                    btn.classList.add('playing');
+                } else {
+                    btn.innerHTML = '<i class="fas fa-play"></i>';
+                    btn.classList.remove('playing');
+                }
+            }
+        });
+    }
+    
+    updateNowPlaying(trackInfo = null) {
+        if (!trackInfo) {
+            trackInfo = this.getCurrentTrack() || {};
+        }
+        
+        if (this.nowPlayingTitle) {
+            this.nowPlayingTitle.textContent = trackInfo.title || 'Unknown Track';
+        }
+        
+        if (this.nowPlayingArtist) {
+            this.nowPlayingArtist.textContent = trackInfo.artist || 'Unknown Artist';
+        }
+        
+        if (this.nowPlayingArt && trackInfo.artwork) {
+            this.nowPlayingArt.src = trackInfo.artwork;
+            this.nowPlayingArt.alt = trackInfo.title ? `${trackInfo.title} Artwork` : 'Album Artwork';
+        }
+    }
+    
+    // Playlist management
+    initPlaylist() {
+        // Get all tracks from the page
+        const trackElements = document.querySelectorAll('.album[data-track-url]');
+        this.playlist = Array.from(trackElements).map((el, index) => ({
+            title: el.dataset.trackTitle || `Track ${index + 1}`,
+            artist: el.dataset.trackArtist || 'Unknown Artist',
+            url: el.dataset.trackUrl,
+            artwork: el.dataset.artwork || ''
+        }));
+    }
+    
+    // Navigation methods
+    next() {
+        if (this.playlist.length > 0) {
+            this.currentTrackIndex = (this.currentTrackIndex + 1) % this.playlist.length;
+            const nextTrack = this.playlist[this.currentTrackIndex];
+            if (nextTrack) {
+                this.play(nextTrack.url, this.currentTrackIndex);
+            }
+        }
+    }
+    
+    prev() {
+        if (this.playlist.length > 0) {
+            this.currentTrackIndex = (this.currentTrackIndex - 1 + this.playlist.length) % this.playlist.length;
+            const prevTrack = this.playlist[this.currentTrackIndex];
+            if (prevTrack) {
+                this.play(prevTrack.url, this.currentTrackIndex);
+            }
+        }
+    }
+    
+    // Error handling
+    handlePlaybackError(trackInfo) {
+        console.error('Error playing track:', trackInfo);
+        this.showNotification('Error playing track. Please try again.');
+        this.pause();
+    }
+    
+    // Event Listeners
+    initEventListeners() {
+        // Play/Pause button
+        if (this.playPauseBtn) {
+            this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+        }
+        
+        // Previous/Next buttons
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => this.prev());
+        }
+        
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => this.next());
+        }
+        
+        // Progress bar seeking
+        if (this.progressSlider) {
+            this.progressSlider.addEventListener('input', (e) => {
+                this.seekToPercentage(e.target.value);
+            });
+        }
+        
+        // Volume control
+        if (this.volumeSlider) {
+            this.volumeSlider.addEventListener('input', (e) => {
+                this.setVolume(e.target.value / 100);
+            });
+        }
+    }
+    
+    // Initialize keyboard shortcuts
+    initKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Space: Play/Pause
+            if (e.code === 'Space' && !['INPUT', 'TEXTAREA', 'BUTTON'].includes(document.activeElement.tagName)) {
+                e.preventDefault();
+                this.togglePlayPause();
+            }
+            
+            // Right Arrow: Seek forward 5 seconds
+            if (e.code === 'ArrowRight' && this.audio) {
+                this.seekTo(Math.min(this.audio.currentTime + 5, this.duration));
+            }
+            
+            // Left Arrow: Seek backward 5 seconds
+            if (e.code === 'ArrowLeft' && this.audio) {
+                this.seekTo(Math.max(this.audio.currentTime - 5, 0));
+            }
+            
+            // M: Toggle mute
+            if (e.code === 'KeyM') {
+                if (this.audio) {
+                    this.audio.muted = !this.audio.muted;
+                    this.showNotification(this.audio.muted ? 'Muted' : 'Unmuted');
+                }
+            }
+            
+            // Up Arrow: Increase volume
+            if (e.code === 'ArrowUp' && this.volumeSlider) {
+                const newVolume = Math.min(1, this.volume + 0.1);
+                this.setVolume(newVolume);
+                this.volumeSlider.value = newVolume * 100;
+                this.showNotification(`Volume: ${Math.round(newVolume * 100)}%`);
+            }
+            
+            // Down Arrow: Decrease volume
+            if (e.code === 'ArrowDown' && this.volumeSlider) {
+                const newVolume = Math.max(0, this.volume - 0.1);
+                this.setVolume(newVolume);
+                this.volumeSlider.value = newVolume * 100;
+                this.showNotification(`Volume: ${Math.round(newVolume * 100)}%`);
+            }
+        });
+    }
+}
+
+function sendToWhatsApp(phoneNumber, message) {
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
 }
 
 // Shopping Cart
@@ -36,21 +389,17 @@ document.addEventListener('click', function(e) {
         return;
     }
     
-    // Get quantity from the quantity selector
-    const quantityInput = productCard.querySelector('.quantity-selector');
-    const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
-    
     // Get product details
     const name = addToCartBtn.dataset.name || productCard.querySelector('h3')?.textContent || 'Product';
     const price = parseFloat(addToCartBtn.dataset.price) || 0;
     const image = addToCartBtn.dataset.image || productCard.querySelector('img')?.src || '';
     
-    // Add to cart with the selected quantity
+    // Add single item to cart
     addToCart({
         name: name,
         price: price,
         image: image
-    }, quantity);
+    });
     
     // Reset processing state after a short delay
     setTimeout(() => {
@@ -63,14 +412,21 @@ function removeFromCart(index) {
     saveCart();
     showNotification('Item removed from cart');
     
-    // If we're on the checkout page, re-render the cart
-    if (window.location.pathname.includes('checkout.html')) {
+    // If cart is empty and we're on the checkout page, refresh to show empty cart message
+    if (cart.length === 0 && window.location.pathname.includes('checkout.html')) {
+        // Small delay to show the notification before refresh
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    } 
+    // If we're on the checkout page and cart is not empty, re-render the cart
+    else if (window.location.pathname.includes('checkout.html')) {
         renderCheckout();
     }
 }
 
 function updateCartCount() {
-    const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+    const count = cart.length; // Each item is a single unit
     const cartCounts = document.querySelectorAll('#cart-count, .cart-count');
     
     cartCounts.forEach(cartCount => {
@@ -165,8 +521,183 @@ function renderCheckout() {
     }
 }
 
+// Mobile Menu Toggle Functions
+function toggleMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    const hamburger = document.querySelector('.hamburger');
+    
+    if (!navLinks || !hamburger) return;
+    
+    const isActive = navLinks.classList.contains('active');
+    
+    if (isActive) {
+        navLinks.classList.remove('active');
+        hamburger.classList.remove('active');
+        document.body.style.overflow = '';
+        document.body.style.touchAction = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        
+        setTimeout(() => {
+            navLinks.classList.remove('animating');
+        }, 300);
+    } else {
+        navLinks.classList.add('active', 'animating');
+        hamburger.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.body.style.touchAction = 'none';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    }
+}
+
+function initMobileMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (!hamburger || !navLinks) return;
+    
+    // Toggle menu on hamburger click
+    hamburger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleMenu();
+    }, { passive: false });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        const nav = document.querySelector('nav');
+        if (navLinks.classList.contains('active') && 
+            !nav.contains(e.target) && 
+            !hamburger.contains(e.target)) {
+            toggleMenu();
+        }
+    }, { passive: true });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+            toggleMenu();
+        }
+    }, { passive: true });
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
+    // Mobile Menu Setup
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    const menuOverlay = document.querySelector('.menu-overlay');
+    const html = document.documentElement;
+    
+    // Check if device is touch-enabled
+    const isTouchDevice = 'ontouchstart' in window || 
+                         navigator.maxTouchPoints > 0 || 
+                         navigator.msMaxTouchPoints > 0;
+    
+    // Add touch class to HTML if touch device
+    if (isTouchDevice) {
+        html.classList.add('touch-device');
+    } else {
+        html.classList.add('no-touch-device');
+    }
+
+    // Toggle mobile menu with better touch support
+    function toggleMenu() {
+        if (!navLinks || !hamburger) return;
+        
+        const isActive = navLinks.classList.contains('active');
+        
+        // Toggle menu state
+        if (isActive) {
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.touchAction = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            
+            // Remove the active class after transition ends
+            setTimeout(() => {
+                navLinks.classList.remove('animating');
+            }, 300);
+        } else {
+            navLinks.classList.add('active', 'animating');
+            hamburger.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+        }
+    }
+    
+    // Initialize mobile menu functionality
+    function initMobileMenu() {
+        if (!hamburger || !navLinks) return;
+        
+        // Toggle menu on hamburger click
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu();
+        }, { passive: false });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (navLinks.classList.contains('active') && 
+                !navLinks.contains(e.target) && 
+                !hamburger.contains(e.target)) {
+                toggleMenu();
+            }
+        }, { passive: true });
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                toggleMenu();
+            }
+        }, { passive: true });
+
+        // Handle nav link clicks
+        const navItems = document.querySelectorAll('.nav-link');
+        navItems.forEach(item => {
+            // Add touch feedback
+            item.addEventListener('touchstart', function() {
+                this.classList.add('touch-active');
+            }, { passive: true });
+            
+            item.addEventListener('touchend', function() {
+                this.classList.remove('touch-active');
+            }, { passive: true });
+            
+            // Handle click/tap
+            item.addEventListener('click', function() {
+                if (navLinks.classList.contains('active')) {
+                    // Small delay to allow the link to be followed
+                    setTimeout(() => {
+                        toggleMenu();
+                    }, 100);
+                }
+            }, { passive: true });
+        });
+    }
+    
+    // Initialize mobile menu if elements exist
+    if (hamburger && navLinks) {
+        initMobileMenu();
+    }
+
+    // Close mobile menu on window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 992 && navLinks && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            if (hamburger) {
+                hamburger.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    });
+
     // Initialize cart count
     updateCartCount();
     
@@ -229,14 +760,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mobile Navigation Toggle
     // Add this code to main.js, right after the DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', function() {
-    // Existing initialization code...
-
-    // Mobile Menu Toggle
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    const nav = document.querySelector('nav');
-
     // Toggle mobile menu
     if (hamburger && navLinks) {
         hamburger.addEventListener('click', function(e) {
@@ -291,9 +814,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-});
+
     // Smooth scrolling for anchor links on the same page
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         // Only process if the link is on the same page (starts with # and is not a file link)
         if (window.location.pathname === anchor.pathname || anchor.pathname === '/') {
             anchor.addEventListener('click', function(e) {
@@ -586,53 +1109,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 tooltip.remove();
             }, { once: true });
         });
-    });
 });
 
-// Audio player functionality
-class AudioPlayer {
-    constructor() {
-        this.audio = null;
-        this.currentTrack = null;
-        this.isPlaying = false;
-        this.volume = 0.7; // Default volume
-        this.currentTime = 0;
-        this.duration = 0;
-        this.progressInterval = null;
-        this.playlist = [];
-        this.currentTrackIndex = -1;
-        
-        // Initialize UI elements (assuming you have these elements in your HTML)
-        this.audioElement = document.getElementById('audio-player');
-        this.playPauseBtn = document.getElementById('play-pause-btn');
-        this.prevBtn = document.getElementById('prev-btn');
-        this.nextBtn = document.getElementById('next-btn');
-        this.progressBar = document.querySelector('.progress');
-        this.progressSlider = document.getElementById('progress');
-        this.volumeSlider = document.getElementById('volume');
-        this.currentTimeEl = document.getElementById('current-time');
-        this.durationEl = document.getElementById('duration');
-        this.nowPlayingTitle = document.getElementById('now-playing-title');
-        this.nowPlayingArtist = document.getElementById('now-playing-artist');
-        this.nowPlayingArt = document.getElementById('now-playing-art');
-        this.musicPlayer = document.querySelector('.music-player');
-        
-        // Initialize event listeners
-        this.initEventListeners();
-        this.initKeyboardShortcuts();
-        
-        // Initialize playlist from the page
-        this.initPlaylist();
-    }
     
-    play(trackUrl, index = -1) {
-        // If no track is provided, try to resume current track
-        if (!trackUrl && this.currentTrack) {
-            this.audio.play().catch(error => console.error('Error resuming playback:', error));
-            this.isPlaying = true;
-            this.updatePlayButtons();
-            return;
-        }
         
         // If clicking play on the current track, just resume playback
         if (this.audio && this.currentTrack === trackUrl) {
@@ -1032,3 +1511,23 @@ class AudioPlayer {
         });
     }
 }
+
+    // Initialize mobile menu if elements exist
+    if (hamburger && navLinks) {
+        initMobileMenu();
+    }
+    
+    // Initialize cart count
+    updateCartCount();
+    
+    // Initialize animations
+    const animatedElements = document.querySelectorAll('.album, .video-item, .event-card, .product');
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+    });
+    
+    // Initialize scroll animations
+    window.addEventListener('scroll', animateOnScroll, { passive: true });
+    animateOnScroll(); // Run once on load
+});

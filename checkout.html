@@ -38,40 +38,33 @@
                 <h2 class="section-title">Finalize Your Order</h2>
                 
                 <div class="checkout-grid">
-                    
                     <div class="cart-details">
-                        <h3 class="section-subtitle">Your Items</h3>
+                        <h3 class="section-subtitle">Your Cart is empty, add some dope Items from our shop</h3>
                         <div id="checkout-items">
                             <div class="empty-cart" style="display: none; text-align: center; padding: 50px;">
                                 <i class="fas fa-shopping-cart fa-3x" style="color: #ff3c78;"></i>
                                 <p style="margin-top: 15px; font-size: 1.2em;">Your cart is empty. Let's find some dope merch!</p>
                                 <a href="shop.html" class="btn btn-primary" style="margin-top: 20px;">Go to Shop</a>
                             </div>
-                            <!-- Order Summary Section -->
-                            <div id="order-summary" class="order-summary" style="margin-top: 30px; background: #f9f9f9; padding: 20px; border-radius: 8px; display: none;">
-                                <h3 style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                            <!-- Cart items will be dynamically inserted here -->
+                        </div>
+                        
+                        <!-- Order Summary Section -->
+                        <div class="order-summary-container">
+                            <div id="order-summary" class="order-summary">
+                                <h3>
                                     <span>Order Summary</span>
                                     <span class="item-count">0 Items</span>
                                 </h3>
-                                <div style="margin: 15px 0;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <div class="summary-details">
+                                    <div class="summary-row">
                                         <span>Subtotal</span>
                                         <span class="subtotal-amount">GH¢0.00</span>
                                     </div>
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                        <span>Shipping</span>
-                                        <span class="shipping-amount">Free</span>
-                                    </div>
                                 </div>
-                                <div style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px; font-weight: 600; display: flex; justify-content: space-between;">
+                                <div class="total-row">
                                     <span>Total</span>
                                     <span class="total-amount">GH¢0.00</span>
-                                </div>
-                                <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 12px; font-weight: 500;" onclick="proceedToCheckout()">
-                                    Proceed to Checkout
-                                </button>
-                                <div style="text-align: center; margin-top: 15px; font-size: 13px; color: #888;">
-                                    <i class="fas fa-lock" style="margin-right: 5px;"></i> Secure Checkout
                                 </div>
                             </div>
                         </div>
@@ -82,7 +75,7 @@
                             <h2 class="section-subtitle">Local Order / Shipping Information</h2>
                             
                             <div class="form-group">
-                                <label for="name">Full Name </label>
+                                <label for="name">Full Name <span class="required">*</span></label>
                                 <input type="text" id="name" name="name" autocomplete="name" required>
                             </div>
                             <div class="form-group">
@@ -90,11 +83,11 @@
                                 <input type="email" id="email" name="email" autocomplete="email">
                             </div>
                             <div class="form-group">
-                                <label for="phone">Phone (WhatsApp) </label>
+                                <label for="phone">Phone (WhatsApp) <span class="required">*</span></label>
                                 <input type="tel" id="phone" name="phone" autocomplete="tel" required>
                             </div>
                             <div class="form-group">
-                                <label for="address">Local Order - (GPS Address) / Shipping Address </label>
+                                <label for="address">Local Order - (GPS Address) / Shipping Address <span class="required">*</span></label>
                                 <textarea id="address" name="address" rows="3" autocomplete="street-address" required></textarea>
                             </div>
                             <div class="form-group">
@@ -102,15 +95,16 @@
                                 <textarea id="notes" name="notes" rows="2" autocomplete="off"></textarea>
                             </div>
 
-                            <div class="checkout-buttons" style="display: flex; flex-direction: column; gap: 10px;">
+                            <div class="checkout-buttons">
                                 <button type="submit" id="whatsapp-checkout" class="btn btn-primary btn-block checkout-btn">
                                     <i class="fab fa-whatsapp"></i> Proceed To Checkout
                                 </button>
-                                <a href="shop.html" class="btn btn-outline btn-block" style="text-align: center;" id="continue-shopping-btn">
+                                <br>
+                                <a href="shop.html" class="btn btn-outline btn-block" id="continue-shopping-btn">
                                     <i class="fas fa-arrow-left"></i> Continue Shopping
                                 </a>
                             </div>
-                            <p class="checkout-note" style="margin-top: 15px;">
+                            <p class="checkout-note">
                                 All orders are finalized via WhatsApp to confirm payment and shipping details.
                             </p>
                         </form>
@@ -252,55 +246,113 @@
         }
         
         function updateCartDisplay() {
-    const cartItemsContainer = document.getElementById('checkout-items');
-    const emptyCartDiv = document.querySelector('.empty-cart');
-    const orderSummary = document.getElementById('order-summary');
-    
-    // Get cart from localStorage or initialize empty array
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    
-    // Filter out any invalid items
-    cart = cart.filter(item => item && item.name && !isNaN(parseFloat(item.price)));
-    
-    // Calculate total number of items
-    const totalItems = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
-    
-    // Update cart count in navigation
-    const cartCountElements = document.querySelectorAll('.cart-count');
-    cartCountElements.forEach(el => el.textContent = totalItems);
-    
-    // Update the item count in the order summary
-    const itemCountElement = document.querySelector('.item-count');
-    if (itemCountElement) {
-        itemCountElement.textContent = `${totalItems} Item${totalItems !== 1 ? 's' : ''}`;
-    }
-    
-    // Show/hide empty cart message and order summary
-    if (cart.length === 0) {
-        if (emptyCartDiv) emptyCartDiv.style.display = 'block';
-        if (orderSummary) orderSummary.style.display = 'none';
-        return;
-    }
-    
-    // Show order summary and hide empty cart message
-    if (emptyCartDiv) emptyCartDiv.style.display = 'none';
-    if (orderSummary) orderSummary.style.display = 'block';
-    
-    // Clear existing items
-    if (cartItemsContainer) {
-        // Add a header showing the total number of items
-        cartItemsContainer.innerHTML = `
-            <div style="margin-bottom: 20px; font-size: 1.1em; font-weight: 500;">
-                Your Cart (${totalItems} Item${totalItems !== 1 ? 's' : ''})
-            </div>
-        `;
-        
-        // Rest of your cart items table and content...
-        // [Previous cart items table code goes here...]
-        
-        // Make sure to include your existing cart items table generation code here
-        // This includes the table header, rows for each item, and the subtotal row
-    }
+            const cartItemsContainer = document.getElementById('checkout-items');
+            const emptyCartDiv = document.querySelector('.empty-cart');
+            const orderSummary = document.getElementById('order-summary');
+            
+            // Get cart from localStorage or initialize empty array
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Filter out any invalid items and remove duplicates
+            const seenItems = new Map();
+            
+            // Process cart to combine duplicate items
+            cart = cart.reduce((uniqueItems, item) => {
+                if (!item || !item.name || isNaN(parseFloat(item.price))) return uniqueItems;
+                
+                const itemKey = `${item.name}-${item.price}`;
+                const existingItem = seenItems.get(itemKey);
+                
+                if (existingItem) {
+                    // If item exists, update quantity
+                    existingItem.quantity = (parseInt(existingItem.quantity) || 1) + (parseInt(item.quantity) || 1);
+                } else {
+                    // Add new item
+                    const newItem = { ...item };
+                    newItem.quantity = parseInt(newItem.quantity) || 1;
+                    seenItems.set(itemKey, newItem);
+                    uniqueItems.push(newItem);
+                }
+                
+                return uniqueItems;
+            }, []);
+            
+            // Save the processed cart back to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Calculate total number of items and subtotal
+            let totalItems = 0;
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                const quantity = parseInt(item.quantity) || 1;
+                totalItems += quantity;
+                subtotal += parseFloat(item.price) * quantity;
+            });
+            
+            // Update cart count in navigation
+            const cartCountElements = document.querySelectorAll('.cart-count');
+            cartCountElements.forEach(el => {
+                el.textContent = totalItems;
+                el.style.display = totalItems > 0 ? 'flex' : 'none';
+            });
+            
+            // Show/hide empty cart message and order summary
+            if (cart.length === 0) {
+                if (emptyCartDiv) emptyCartDiv.style.display = 'block';
+                if (orderSummary) orderSummary.style.display = 'none';
+                if (cartItemsContainer) cartItemsContainer.innerHTML = '';
+                return;
+            }
+            
+            // Show order summary and hide empty cart message
+            if (emptyCartDiv) emptyCartDiv.style.display = 'none';
+            if (orderSummary) orderSummary.style.display = 'block';
+            
+            // Update the item count in the order summary
+            const itemCountElement = document.querySelector('.item-count');
+            const subtotalElement = document.querySelector('.subtotal-amount');
+            const totalElement = document.querySelector('.total-amount');
+            
+            if (itemCountElement) {
+                itemCountElement.textContent = `${totalItems} Item${totalItems !== 1 ? 's' : ''}`;
+            }
+            
+            if (subtotalElement) {
+                subtotalElement.textContent = `GH¢${subtotal.toFixed(2)}`;
+            }
+            
+            if (totalElement) {
+                totalElement.textContent = `GH¢${subtotal.toFixed(2)}`;
+            }
+            
+            // Clear existing items and update cart display
+            if (cartItemsContainer) {
+                cartItemsContainer.innerHTML = `
+                    <div class="cart-header">
+                        Your Cart (${totalItems} Item${totalItems !== 1 ? 's' : ''})
+                    </div>
+                    <div id="cart-items-list">
+                        ${cart.map(item => `
+                            <div class="cart-item">
+                                <div class="cart-item-image">
+                                    <img src="${item.image || 'img/placeholder.jpg'}" alt="${item.name}">
+                                </div>
+                                <div class="cart-item-details">
+                                    <div class="cart-item-name">${item.name}</div>
+                                    <div class="cart-item-price">GH¢${parseFloat(item.price).toFixed(2)} × ${item.quantity || 1}</div>
+                                    <button onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')" class="remove-item">
+                                        Remove
+                                    </button>
+                                </div>
+                                <div class="cart-item-total">
+                                    GH¢${(parseFloat(item.price) * (item.quantity || 1)).toFixed(2)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
     
     // Update the order summary with totals
     updateOrderSummary(cart);
