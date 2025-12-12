@@ -263,6 +263,24 @@ img {
 }
 
 /* Mobile menu styles */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 @media (max-width: 992px) {
     .hamburger {
         display: flex;
@@ -285,7 +303,7 @@ img {
         overflow-y: auto;
     }
 
-    .nav-links[aria-expanded="true"] {
+    .nav-links.active {
         transform: translateX(-100%);
     }
 
@@ -295,25 +313,19 @@ img {
         text-align: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-
-    /* Overlay when menu is open */
-    .nav-overlay {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 998;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
+    
+    /* Hamburger animation */
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
     }
-
-    .nav-overlay.visible {
-        opacity: 1;
-        visibility: visible;
+    
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
     }
 }
 

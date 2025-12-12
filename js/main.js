@@ -5,7 +5,7 @@ function sendToWhatsApp(phoneNumber, message) {
 }
 
 // Shopping Cart
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+// cart is already declared at the top of the file
 
 // Save cart to localStorage
 function saveCart() {
@@ -362,7 +362,7 @@ function sendToWhatsApp(phoneNumber, message) {
 }
 
 // Shopping Cart
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+// cart is already declared at the top of the file
 
 // Save cart to localStorage
 function saveCart() {
@@ -527,7 +527,7 @@ function renderCheckout() {
 class MobileMenu {
     constructor() {
         this.hamburger = document.querySelector('.hamburger');
-        this.navLinks = document.getElementById('navbarContent');
+        this.navLinks = document.querySelector('.nav-links');
         this.overlay = document.createElement('div');
         this.isOpen = false;
         
@@ -537,25 +537,20 @@ class MobileMenu {
     }
     
     init() {
-        // Set initial ARIA attributes
-        this.hamburger.setAttribute('aria-expanded', 'false');
-        this.hamburger.setAttribute('aria-controls', 'navbarContent');
-        this.navLinks.setAttribute('aria-expanded', 'false');
-        
-        // Create and append overlay
-        this.overlay.classList.add('nav-overlay');
+        // Create overlay
+        this.overlay.className = 'mobile-menu-overlay';
         document.body.appendChild(this.overlay);
         
         // Add event listeners
         this.hamburger.addEventListener('click', (e) => this.toggleMenu(e));
         this.overlay.addEventListener('click', () => this.closeMenu());
         
-        // Close when clicking on nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
+        // Close menu when clicking on nav links
+        document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => this.closeMenu());
         });
         
-        // Close on escape key
+        // Handle keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.isOpen) {
                 this.closeMenu();
@@ -566,7 +561,6 @@ class MobileMenu {
     toggleMenu(e) {
         e.preventDefault();
         e.stopPropagation();
-        
         if (this.isOpen) {
             this.closeMenu();
         } else {
@@ -575,44 +569,42 @@ class MobileMenu {
     }
     
     openMenu() {
-        this.hamburger.setAttribute('aria-expanded', 'true');
-        this.navLinks.setAttribute('aria-expanded', 'true');
-        this.overlay.classList.add('visible');
+        this.hamburger.classList.add('active');
+        this.navLinks.classList.add('active');
+        this.overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         this.isOpen = true;
-        
-        // Add active class to nav links
-        this.navLinks.classList.add('active');
-        this.hamburger.classList.add('active');
     }
     
     closeMenu() {
-        this.hamburger.setAttribute('aria-expanded', 'false');
-        this.navLinks.setAttribute('aria-expanded', 'false');
-        this.overlay.classList.remove('visible');
+        this.hamburger.classList.remove('active');
+        this.navLinks.classList.remove('active');
+        this.overlay.classList.remove('active');
         document.body.style.overflow = '';
         this.isOpen = false;
-        
-        // Remove active class from nav links
-        this.navLinks.classList.remove('active');
-        this.hamburger.classList.remove('active');
     }
 }
 
-// Initialize mobile menu when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize mobile menu if elements exist
-    if (document.querySelector('.hamburger') && document.getElementById('navbarContent')) {
-        new MobileMenu();
-    }
-
-// Initialize the application
+// Initialize the application when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile Menu Setup
+    // Initialize mobile menu if elements exist
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    const menuOverlay = document.querySelector('.menu-overlay');
-    const html = document.documentElement;
+    
+    function initMobileMenu() {
+        if (hamburger && navLinks) {
+            const mobileMenu = new MobileMenu();
+            
+            // Additional mobile menu setup
+            const navItems = document.querySelectorAll('.nav-links a');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    mobileMenu.closeMenu();
+                }
+            });
+        });
+    }
     
     // Check if device is touch-enabled
     const isTouchDevice = 'ontouchstart' in window || 
@@ -620,120 +612,41 @@ document.addEventListener('DOMContentLoaded', function() {
                          navigator.msMaxTouchPoints > 0;
     
     // Add touch class to HTML if touch device
-    if (isTouchDevice) {
-        html.classList.add('touch-device');
-    } else {
-        html.classList.add('no-touch-device');
-    }
-
-    // Toggle mobile menu with better touch support
-    function toggleMenu() {
-        if (!navLinks || !hamburger) return;
-        
-        const isActive = navLinks.classList.contains('active');
-        
-        // Toggle menu state
-        if (isActive) {
-            navLinks.classList.remove('active');
-            hamburger.classList.remove('active');
-            document.body.style.overflow = '';
-            document.body.style.touchAction = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
-            
-            // Remove the active class after transition ends
-            setTimeout(() => {
-                navLinks.classList.remove('animating');
-            }, 300);
-        } else {
-            navLinks.classList.add('active', 'animating');
-            hamburger.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.body.style.touchAction = 'none';
-            document.body.style.position = 'fixed';
-            document.body.style.width = '100%';
-        }
-    }
+    document.documentElement.classList.add(isTouchDevice ? 'touch-device' : 'no-touch-device');
     
-    // Initialize mobile menu functionality
-    function initMobileMenu() {
-        if (!hamburger || !navLinks) return;
-        
-        // Toggle menu on hamburger click
-        hamburger.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMenu();
-        }, { passive: false });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (navLinks.classList.contains('active') && 
-                !navLinks.contains(e.target) && 
-                !hamburger.contains(e.target)) {
-                toggleMenu();
-            }
-        }, { passive: true });
-        
-        // Close menu on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
-                toggleMenu();
-            }
-        }, { passive: true });
-
-        // Handle nav link clicks
-        const navItems = document.querySelectorAll('.nav-link');
-        navItems.forEach(item => {
-            // Add touch feedback
-            item.addEventListener('touchstart', function() {
-                this.classList.add('touch-active');
-            }, { passive: true });
-            
-            item.addEventListener('touchend', function() {
-                this.classList.remove('touch-active');
-            }, { passive: true });
-            
-            // Handle click/tap
-            item.addEventListener('click', function() {
-                if (navLinks.classList.contains('active')) {
-                    // Small delay to allow the link to be followed
-                    setTimeout(() => {
-                        toggleMenu();
-                    }, 100);
-                }
-            }, { passive: true });
-        });
-    }
-    
-    // Initialize mobile menu if elements exist
-    if (hamburger && navLinks) {
-        initMobileMenu();
-    }
-
-    // Close mobile menu on window resize
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 992 && navLinks && navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-            if (hamburger) {
-                hamburger.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
-    });
-
     // Initialize cart count
     updateCartCount();
     
-    // Single event listener for all add to cart buttons
-    document.addEventListener('click', function(e) {
-        // Check if the clicked element or any of its parents is an add to cart button
-        const addToCartBtn = e.target.closest('.add-to-cart, .btn-shop');
-        if (!addToCartBtn) return;
+    // Initialize mobile menu if elements exist
+    if (hamburger && navLinks) {
+        const mobileMenu = new MobileMenu();
         
-        e.preventDefault();
+        // Close mobile menu on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 992 && navLinks.classList.contains('active')) {
+                mobileMenu.closeMenu();
+            }
+        });
+    }
+    
+    // Initialize any other components or event listeners here
+    // For example:
+    // - Initialize audio player
+    // - Set up any other event listeners
+    // - Initialize any plugins or third-party libraries
+    
+    console.log('Application initialized successfully');
+});
+
+// Single event listener for all add to cart buttons
+document.addEventListener('click', function(e) {
+    // Check if the clicked element or any of its parents is an add to cart button
+    const addToCartBtn = e.target.closest('.add-to-cart, .btn-shop');
+    if (!addToCartBtn) return;
         
-        // Prevent multiple clicks
+    e.preventDefault();
+    
+    // Prevent multiple clicks
         if (addToCartBtn.classList.contains('processing')) return;
         addToCartBtn.classList.add('processing');
         
@@ -1135,11 +1048,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-    
+// Audio Player Class
+class AudioPlayer {
+    constructor() {
+        this.audio = null;
+        this.currentTrack = null;
+        this.isPlaying = false;
+        this.volume = 0.7; // Default volume
+        this.currentTime = 0;
+        this.duration = 0;
+        this.progressInterval = null;
+        this.playlist = [];
+        this.currentTrackIndex = -1;
         
+        // Initialize UI elements
+        this.audioElement = document.getElementById('audio-player');
+        this.playPauseBtn = document.getElementById('play-pause-btn');
+        this.prevBtn = document.getElementById('prev-btn');
+        this.nextBtn = document.getElementById('next-btn');
+        this.progressBar = document.querySelector('.progress');
+        this.progressSlider = document.getElementById('progress');
+        this.volumeSlider = document.getElementById('volume');
+        this.currentTimeEl = document.getElementById('current-time');
+        this.durationEl = document.getElementById('duration');
+        this.nowPlayingTitle = document.getElementById('now-playing-title');
+        this.nowPlayingArtist = document.getElementById('now-playing-artist');
+        this.nowPlayingArt = document.getElementById('now-playing-art');
+        this.musicPlayer = document.querySelector('.music-player');
+        
+        // Initialize event listeners
+        this.initEventListeners();
+        this.initKeyboardShortcuts();
+        
+        // Initialize playlist from the page
+        this.initPlaylist();
+    }
+    
+    play(trackUrl, index = -1) {
         // If clicking play on the current track, just resume playback
         if (this.audio && this.currentTrack === trackUrl) {
-            this.audio.play().catch(error => console.error('Error resuming playback:', error));
+            this.audio.play().catch(error => {
+                console.error('Error resuming playback:', error);
+            });
             this.isPlaying = true;
             this.updatePlayButtons();
             this.updateNowPlaying();
