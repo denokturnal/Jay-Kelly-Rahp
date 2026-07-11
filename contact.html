@@ -61,12 +61,13 @@
                 <a href="shop.html" class="nav-link">Shop</a>
                 <a href="contact.html" class="nav-link active">Contact</a>
             </div>
-            <div class="hamburger">
+            <div class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
                 <div class="bar"></div>
                 <div class="bar"></div>
                 <div class="bar"></div>
             </div>
         </div>
+        <div class="mobile-menu-overlay"></div>
     </nav>
 
     <!-- Contact Section -->
@@ -345,8 +346,8 @@
         }
         
         // Add CSS for notifications
-        const style = document.createElement('style');
-        style.textContent = `
+        const notificationStyle = document.createElement('style');
+        notificationStyle.textContent = `
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(20px); }
                 to { opacity: 1; transform: translateY(0); }
@@ -357,7 +358,7 @@
                 to { opacity: 0; transform: translateY(20px); }
             }
         `;
-        document.head.appendChild(style);
+        document.head.appendChild(notificationStyle);
     </script>
 </body>
 </html>

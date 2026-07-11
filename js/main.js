@@ -154,58 +154,6 @@ function renderCart() {
     }
 }
 
-// Mobile Menu Class
-class MobileMenu {
-    constructor() {
-        this.hamburger = document.querySelector('.hamburger');
-        this.navLinks = document.querySelector('.nav-links');
-        this.overlay = document.createElement('div');
-        this.isOpen = false;
-        
-        if (this.hamburger && this.navLinks) {
-            this.init();
-        }
-    }
-    
-    init() {
-        // Create overlay
-        this.overlay.className = 'nav-overlay';
-        document.body.appendChild(this.overlay);
-        
-        // Toggle menu when hamburger is clicked
-        this.hamburger.addEventListener('click', (e) => this.toggleMenu(e));
-        
-        // Close menu when clicking outside
-        this.overlay.addEventListener('click', () => this.closeMenu());
-        
-        // Close menu when clicking on a nav link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => this.closeMenu());
-        });
-    }
-    
-    toggleMenu(e) {
-        e.stopPropagation();
-        this.isOpen ? this.closeMenu() : this.openMenu();
-    }
-    
-    openMenu() {
-        this.hamburger.classList.add('active');
-        this.navLinks.classList.add('active');
-        this.overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        this.isOpen = true;
-    }
-    
-    closeMenu() {
-        this.hamburger.classList.remove('active');
-        this.navLinks.classList.remove('active');
-        this.overlay.classList.remove('active');
-        document.body.style.overflow = '';
-        this.isOpen = false;
-    }
-}
-
 // Audio Player Class
 class AudioPlayer {
     constructor() {
@@ -704,123 +652,115 @@ function renderCheckout() {
     }
 }
 
-/**
- * Mobile Menu Functionality
- */
-class MobileMenu {
-    constructor() {
-        this.hamburger = document.querySelector('.hamburger');
-        this.navLinks = document.querySelector('.nav-links');
-        this.overlay = document.createElement('div');
-        this.isOpen = false;
-        
-        if (this.hamburger && this.navLinks) {
-            this.init();
-        }
-    }
-    
-    init() {
-        // Create overlay
-        this.overlay.className = 'mobile-menu-overlay';
-        document.body.appendChild(this.overlay);
-        
-        // Add event listeners
-        this.hamburger.addEventListener('click', (e) => this.toggleMenu(e));
-        this.overlay.addEventListener('click', () => this.closeMenu());
-        
-        // Close menu when clicking on nav links
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => this.closeMenu());
-        });
-        
-        // Handle keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isOpen) {
-                this.closeMenu();
-            }
-        });
-    }
-    
-    toggleMenu(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.isOpen) {
-            this.closeMenu();
-        } else {
-            this.openMenu();
-        }
-    }
-    
-    openMenu() {
-        this.hamburger.classList.add('active');
-        this.navLinks.classList.add('active');
-        this.overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        this.isOpen = true;
-    }
-    
-    closeMenu() {
-        this.hamburger.classList.remove('active');
-        this.navLinks.classList.remove('active');
-        this.overlay.classList.remove('active');
-        document.body.style.overflow = '';
-        this.isOpen = false;
-    }
-}
-
 // Initialize the application when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize mobile menu if elements exist
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     
-    function initMobileMenu() {
-        const mobileMenu = new MobileMenu();
-        
-        // Close menu when clicking on a nav link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.closeMenu();
-            });
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (navLinks && navLinks.classList.contains('active') && 
-                !e.target.closest('.nav-links') && 
-                !e.target.closest('.hamburger')) {
-                mobileMenu.closeMenu();
-            }
-        });
-        
-        return mobileMenu;
-    }
-    
-    // Initialize mobile menu if elements exist
-    if (hamburger && navLinks) {
-        initMobileMenu();
-    }
-    
     // Initialize cart count
     updateCartCount();
     
     // Initialize mobile menu if elements exist
     if (hamburger && navLinks) {
-        const mobileMenu = new MobileMenu();
+        const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
         
-        // Close mobile menu on window resize
+        // Toggle mobile menu
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isActive = navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+            
+            // Update ARIA attribute
+            hamburger.setAttribute('aria-expanded', isActive);
+            
+            // Toggle overlay
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.classList.toggle('active');
+            }
+            
+            // Toggle overflow on body when menu is open
+            if (isActive) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close mobile menu when clicking on a nav link
+        const navItems = document.querySelectorAll('.nav-links a');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    if (mobileMenuOverlay) {
+                        mobileMenuOverlay.classList.remove('active');
+                    }
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Close menu when clicking overlay
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active') &&
+                !navLinks.contains(e.target) &&
+                !hamburger.contains(e.target) &&
+                (!mobileMenuOverlay || !mobileMenuOverlay.contains(e.target))) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                if (mobileMenuOverlay) {
+                    mobileMenuOverlay.classList.remove('active');
+                }
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close menu on window resize (in case user rotates device)
         window.addEventListener('resize', () => {
             if (window.innerWidth > 992 && navLinks.classList.contains('active')) {
-                mobileMenu.closeMenu();
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                if (mobileMenuOverlay) {
+                    mobileMenuOverlay.classList.remove('active');
+                }
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Handle escape key to close menu
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                if (mobileMenuOverlay) {
+                    mobileMenuOverlay.classList.remove('active');
+                }
+                document.body.style.overflow = '';
             }
         });
     }
     
-    // Initialize any other components or event listeners here
-    // For example:
-    // - Initialize audio player
-    // - Set up any other event listeners
-    // - Initialize any plugins or third-party libraries
+    // If we're on the checkout page, render it
+    if (window.location.pathname.includes('checkout.html')) {
+        renderCheckout();
+    }
     
     console.log('Application initialized successfully');
 });
@@ -873,70 +813,6 @@ document.addEventListener('click', function(e) {
         setTimeout(() => {
             addToCartBtn.classList.remove('processing');
         }, 1000);
-    });
-
-    // If we're on the checkout page, render it
-    if (window.location.pathname.includes('checkout.html')) {
-        renderCheckout();
-    }
-    
-    // ... [Rest of the existing DOMContentLoaded logic remains] ...
-    
-    // Mobile Navigation Toggle
-    // Add this code to main.js, right after the DOMContentLoaded event listener
-    // Toggle mobile menu
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent event from bubbling up to document
-            navLinks.classList.toggle('active');
-            hamburger.classList.toggle('active');
-            
-            // Toggle overflow on body when menu is open
-            if (navLinks.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        });
-    }
-
-    // Close mobile menu when clicking on a nav link
-    const navItems = document.querySelectorAll('.nav-links a');
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            if (navLinks && navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
-                if (hamburger) {
-                    hamburger.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            }
-        });
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (navLinks && navLinks.classList.contains('active') && 
-            !nav.contains(e.target) && 
-            !hamburger.contains(e.target)) {
-            navLinks.classList.remove('active');
-            if (hamburger) {
-                hamburger.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
-    });
-
-    // Close menu on window resize (in case user rotates device)
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 992 && navLinks && navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-            if (hamburger) {
-                hamburger.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
     });
 
     // Smooth scrolling for anchor links on the same page
@@ -1234,441 +1110,3 @@ document.addEventListener('click', function(e) {
             }, { once: true });
         });
 });
-
-// Audio Player Class
-class AudioPlayer {
-    constructor() {
-        this.audio = null;
-        this.currentTrack = null;
-        this.isPlaying = false;
-        this.volume = 0.7; // Default volume
-        this.currentTime = 0;
-        this.duration = 0;
-        this.progressInterval = null;
-        this.playlist = [];
-        this.currentTrackIndex = -1;
-        
-        // Initialize UI elements
-        this.audioElement = document.getElementById('audio-player');
-        this.playPauseBtn = document.getElementById('play-pause-btn');
-        this.prevBtn = document.getElementById('prev-btn');
-        this.nextBtn = document.getElementById('next-btn');
-        this.progressBar = document.querySelector('.progress');
-        this.progressSlider = document.getElementById('progress');
-        this.volumeSlider = document.getElementById('volume');
-        this.currentTimeEl = document.getElementById('current-time');
-        this.durationEl = document.getElementById('duration');
-        this.nowPlayingTitle = document.getElementById('now-playing-title');
-        this.nowPlayingArtist = document.getElementById('now-playing-artist');
-        this.nowPlayingArt = document.getElementById('now-playing-art');
-        this.musicPlayer = document.querySelector('.music-player');
-        
-        // Initialize event listeners
-        this.initEventListeners();
-        this.initKeyboardShortcuts();
-        
-        // Initialize playlist from the page
-        this.initPlaylist();
-    }
-    
-    play(trackUrl, index = -1) {
-        // If clicking play on the current track, just resume playback
-        if (this.audio && this.currentTrack === trackUrl) {
-            this.audio.play().catch(error => {
-                console.error('Error resuming playback:', error);
-            });
-            this.isPlaying = true;
-            this.updatePlayButtons();
-            this.updateNowPlaying();
-            this.startProgressTracking();
-            this.musicPlayer.classList.add('visible');
-            return;
-        }
-        
-        // Stop any current audio
-        if (this.audio) {
-            this.audio.pause();
-            this.audio = null;
-        }
-        
-        // Set the current track index if provided
-        if (index >= 0) {
-            this.currentTrackIndex = index;
-        } else if (trackUrl) {
-            // Find the track in the playlist
-            const trackIndex = this.playlist.findIndex(track => track.url === trackUrl);
-            if (trackIndex >= 0) {
-                this.currentTrackIndex = trackIndex;
-            }
-        }
-        
-        // Get track info
-        const trackInfo = this.playlist[this.currentTrackIndex];
-        if (!trackInfo) return;
-        
-        // Create new audio element
-        this.audio = new Audio(trackInfo.url);
-        this.audio.volume = this.volume;
-        this.currentTrack = trackInfo.url;
-        
-        // Set up event listeners
-        this.audio.addEventListener('loadedmetadata', () => {
-            this.duration = this.audio.duration;
-            this.updateProgressBar();
-            this.updateDurationDisplay();
-            
-            // Start playing if not already playing
-            if (!this.isPlaying) {
-                this.audio.play().catch(error => {
-                    console.error('Error playing audio:', error);
-                    this.handlePlaybackError(trackInfo);
-                });
-            }
-        });
-        
-        this.audio.addEventListener('timeupdate', () => {
-            this.currentTime = this.audio.currentTime;
-            this.updateProgressBar();
-        });
-        
-        this.audio.addEventListener('play', () => {
-            this.isPlaying = true;
-            this.updatePlayButtons();
-            this.updateNowPlaying(trackInfo);
-            this.startProgressTracking();
-            this.musicPlayer.classList.add('visible');
-            this.showNotification(`Now playing: ${trackInfo.title}`);
-        });
-        
-        this.audio.addEventListener('error', (e) => {
-            console.error('Audio error:', e);
-            this.handlePlaybackError(trackInfo);
-        });
-            
-        this.audio.addEventListener('ended', () => {
-            this.next();
-        });
-        
-        // Try to play the audio
-        this.audio.play().catch(error => {
-            console.error('Error playing audio:', error);
-            this.handlePlaybackError(trackInfo);
-        });
-    }
-    
-    pause() {
-        if (this.audio) {
-            this.audio.pause();
-            this.isPlaying = false;
-            this.updatePlayButtons();
-            this.stopProgressTracking();
-        }
-    }
-    
-    togglePlayPause() {
-        if (this.isPlaying) {
-            this.pause();
-        } else if (this.currentTrack) {
-            this.play(this.currentTrack);
-        } else if (this.playlist.length > 0) {
-            // If nothing is playing but we have a playlist, play the first track
-            this.play(this.playlist[0].url, 0);
-        }
-    }
-    
-    setVolume(volume) {
-        this.volume = volume / 100; // Convert from 0-100 to 0-1
-        if (this.audio) {
-            this.audio.volume = this.volume;
-        }
-        // Update volume icon based on level
-        const volumeIcon = document.querySelector('.volume-icon');
-        if (volumeIcon) {
-            if (this.volume <= 0) {
-                volumeIcon.className = 'fas fa-volume-mute volume-icon';
-            } else if (this.volume < 0.5) {
-                volumeIcon.className = 'fas fa-volume-down volume-icon';
-            } else {
-                volumeIcon.className = 'fas fa-volume-up volume-icon';
-            }
-        }
-    }
-    
-    seekTo(time) {
-        if (this.audio) {
-            this.audio.currentTime = time;
-            this.currentTime = time;
-            this.updateProgressBar();
-        }
-    }
-    
-    seekToPercentage(percent) {
-        if (this.audio && this.duration) {
-            const seekTime = (percent / 100) * this.duration;
-            this.seekTo(seekTime);
-        }
-    }
-    
-    startProgressTracking() {
-        this.stopProgressTracking();
-        this.progressInterval = setInterval(() => {
-            this.updateProgressBar();
-            this.updateCurrentTimeDisplay();
-        }, 1000);
-    }
-    
-    stopProgressTracking() {
-        if (this.progressInterval) {
-            clearInterval(this.progressInterval);
-            this.progressInterval = null;
-        }
-    }
-    
-    updateProgressBar() {
-        if (!this.audio) return;
-        
-        const progress = (this.audio.currentTime / this.duration) * 100 || 0;
-        this.progressBar.style.width = `${progress}%`;
-        this.progressSlider.value = progress;
-    }
-    
-    updateCurrentTimeDisplay() {
-        if (!this.audio) return;
-        this.currentTimeEl.textContent = this.formatTime(this.audio.currentTime);
-    }
-    
-    updateDurationDisplay() {
-        if (!this.audio) return;
-        this.durationEl.textContent = this.formatTime(this.audio.duration || 0);
-    }
-    
-    updateVolumeUI() {
-        if (this.volumeSlider) {
-            this.volumeSlider.value = this.volume * 100;
-        }
-    }
-    
-    formatTime(seconds) {
-        if (isNaN(seconds)) return '0:00';
-        
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-    
-    getCurrentTrack() {
-        if (this.currentTrackIndex >= 0 && this.currentTrackIndex < this.playlist.length) {
-            return this.playlist[this.currentTrackIndex];
-        }
-        return null;
-    }
-    
-    showNotification(message) {
-        const notification = document.createElement('div');
-        notification.className = 'notification';
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 100);
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 300);
-        }, 3000);
-    }
-    
-    updatePlayButtons() {
-        const playPauseIcon = this.playPauseBtn ? this.playPauseBtn.querySelector('i') : null;
-        if (!playPauseIcon) return;
-        
-        if (this.isPlaying) {
-            playPauseIcon.className = 'fas fa-pause';
-        } else {
-            playPauseIcon.className = 'fas fa-play';
-        }
-    }
-    
-    updateNowPlaying(trackInfo = null) {
-        if (!trackInfo) {
-            trackInfo = this.getCurrentTrack();
-        }
-        
-        if (!trackInfo) return;
-        
-        if (this.nowPlayingTitle) {
-            this.nowPlayingTitle.textContent = trackInfo.title;
-        }
-        
-        if (this.nowPlayingArtist) {
-            this.nowPlayingArtist.textContent = trackInfo.artist || 'Jay Kelly Rahp';
-        }
-        
-        if (this.nowPlayingArt) {
-            this.nowPlayingArt.src = trackInfo.artwork || 'https://placehold.co/60/0a0e2a/ff3c78/png?text=Album+Art';
-            this.nowPlayingArt.alt = trackInfo.title;
-        }
-    }
-    
-    // Playlist management
-    initPlaylist() {
-        // Get all album elements
-        const albums = document.querySelectorAll('.album');
-        this.playlist = [];
-        
-        // Define audio file paths (update these with your actual audio file paths)
-        const audioFiles = {
-            'Grandeza': 'audio/grandeza.mp3',
-            'THE EARPEACE ALBUM': 'audio/earpeace.mp3',
-            'Synthetic Dreams': 'audio/synthetic-dreams.mp3',
-            'Midnight Sessions': 'audio/midnight-sessions.mp3',
-            'Urban Echoes': 'audio/urban-echoes.mp3',
-            'Neon Dreams': 'audio/neon-dreams.mp3',
-            'Midnight Vibes': 'audio/midnight-vibes.mp3',
-            'Echoes in the Void': 'audio/echoes-void.mp3'
-        };
-        
-        albums.forEach((album, index) => {
-            const trackId = album.dataset.track;
-            const title = album.dataset.track || `Track ${index + 1}`;
-            const artist = 'Jay Kelly Rahp';
-            const artwork = album.querySelector('img')?.src || '';
-            const url = audioFiles[trackId] || '';
-            
-            if (url) {
-                this.playlist.push({
-                    id: trackId,
-                    title,
-                    artist,
-                    artwork,
-                    url,
-                    element: album
-                });
-            }
-        });
-    }
-    
-    // Navigation methods
-    next() {
-        if (this.playlist.length === 0) return;
-        
-        let nextIndex = this.currentTrackIndex + 1;
-        if (nextIndex >= this.playlist.length) {
-            // If repeat is enabled, go back to the first track
-            nextIndex = 0;
-        }
-        
-        this.play(this.playlist[nextIndex].url, nextIndex);
-    }
-    
-    prev() {
-        if (this.playlist.length === 0) return;
-        
-        let prevIndex = this.currentTrackIndex - 1;
-        if (prevIndex < 0) {
-            // If at the first track, go to the last one
-            prevIndex = this.playlist.length - 1;
-        }
-        
-        this.play(this.playlist[prevIndex].url, prevIndex);
-    }
-    
-    // Error handling
-    handlePlaybackError(trackInfo) {
-        console.error(`Error playing track: ${trackInfo?.title || 'Unknown'}`);
-        this.showNotification(`Error playing: ${trackInfo?.title || 'track'}`);
-        
-        // Try to open the Audiomack link directly
-        if (trackInfo?.element) {
-            const link = trackInfo.element.querySelector('a[href^="https://audiomack.com"]');
-            if (link) {
-                window.open(link.href, '_blank');
-            }
-        }
-    }
-    
-    // Event Listeners
-    initEventListeners() {
-        // Play/Pause button
-        if (this.playPauseBtn) {
-            this.playPauseBtn.addEventListener('click', () => {
-                this.togglePlayPause();
-            });
-        }
-        
-        // Previous button
-        if (this.prevBtn) {
-            this.prevBtn.addEventListener('click', () => {
-                this.prev();
-            });
-        }
-        
-        // Next button
-        if (this.nextBtn) {
-            this.nextBtn.addEventListener('click', () => {
-                this.next();
-            });
-        }
-        
-        // Volume slider
-        if (this.volumeSlider) {
-            this.volumeSlider.addEventListener('input', (e) => {
-                this.setVolume(e.target.value);
-            });
-            this.updateVolumeUI(); // Set initial UI value
-        }
-        
-        // Progress slider
-        if (this.progressSlider) {
-            // Handle seeking when the user drags the slider
-            this.progressSlider.addEventListener('input', (e) => {
-                this.seekToPercentage(e.target.value);
-                this.updateCurrentTimeDisplay();
-            });
-            
-            // Resume progress tracking when user is done seeking
-            this.progressSlider.addEventListener('change', () => {
-                if (this.isPlaying) {
-                    this.startProgressTracking();
-                }
-            });
-        }
-    }
-    
-    // Initialize keyboard shortcuts
-    initKeyboardShortcuts() {
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-            
-            switch (e.key) {
-                case ' ': // Spacebar to toggle play/pause
-                    e.preventDefault();
-                    this.togglePlayPause();
-                    break;
-                case 'ArrowRight': // Right arrow to skip forward
-                    e.preventDefault();
-                    this.seekTo(this.currentTime + 5);
-                    break;
-                case 'ArrowLeft': // Left arrow to skip backward
-                    e.preventDefault();
-                    this.seekTo(this.currentTime - 5);
-                    break;
-                case 'm': // 'm' to mute/unmute
-                    // Simple mute logic (resets volume to 0 or back to 0.7)
-                    if (this.audio) {
-                        if (this.audio.volume > 0) {
-                            this.setVolume(0);
-                        } else {
-                            this.setVolume(70); // Set back to 70%
-                        }
-                    }
-                    break;
-            }
-        });
-    }
-}

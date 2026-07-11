@@ -46,23 +46,14 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <nav class="navbar">
         <div class="container">
             <a href="#" class="logo-container">
                 <div class="logo-circle">
                     <img src="img/JKR logo.jpg" alt="JKR Logo" class="logo-img">
                 </div>
             </a>
-            
-            <!-- Mobile Menu Button -->
-            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarContent">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-            
-            <!-- Navigation Links -->
-            <div class="nav-links" id="navbarContent">
+            <div class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="music.html" class="nav-link">Music</a>
                 <a href="videos.html" class="nav-link">Videos</a>
@@ -70,7 +61,13 @@
                 <a href="shop.html" class="nav-link">Shop</a>
                 <a href="contact.html" class="nav-link">Contact</a>
             </div>
+            <div class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
         </div>
+        <div class="mobile-menu-overlay"></div>
     </nav>
 
     <!-- Hero Section -->
@@ -238,65 +235,5 @@
         });
     </script>
     <script src="js/main.js"></script>
-    <script>
-        // Handle newsletter form submission
-        const newsletterForm = document.getElementById('newsletterForm');
-        if (newsletterForm) {
-            const newsletterStatus = newsletterForm.querySelector('.newsletter-status');
-            const submitButton = newsletterForm.querySelector('button[type="submit"]');
-            const buttonText = submitButton.querySelector('.button-text');
-            const spinner = submitButton.querySelector('.spinner');
-            
-            newsletterForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                // Show loading state
-                buttonText.style.display = 'none';
-                spinner.style.display = 'inline';
-                submitButton.disabled = true;
-                
-                try {
-                    const response = await fetch(newsletterForm.action, {
-                        method: 'POST',
-                        body: new FormData(newsletterForm),
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        newsletterStatus.textContent = 'Thank you for subscribing!';
-                        newsletterStatus.style.display = 'block';
-                        newsletterForm.reset();
-                        
-                        // Hide success message after 5 seconds
-                        setTimeout(() => {
-                            newsletterStatus.style.display = 'none';
-                        }, 5000);
-                    } else {
-                        throw new Error('Subscription failed');
-                    }
-                } catch (error) {
-                    newsletterStatus.textContent = 'Failed to subscribe. Please try again.';
-                    newsletterStatus.style.color = '#f44336';
-                    newsletterStatus.style.display = 'block';
-                } finally {
-                    // Reset button state
-                    buttonText.style.display = 'inline';
-                    spinner.style.display = 'none';
-                    submitButton.disabled = false;
-                }
-            });
-        }
-    </script>
-    <style>
-        .spinner {
-            display: none;
-            margin-left: 0.5rem;
-        }
-        .newsletter-status {
-            transition: all 0.3s ease;
-        }
-    </style>
 </body>
 </html>
